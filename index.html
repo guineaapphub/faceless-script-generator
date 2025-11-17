@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Faceless Script Generator</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --primary: #39ff14; /* neon green */
+        --bg-light: #ffffff;
+        --bg-dark: #0d0d0d;
+        --text-light: #0d0d0d;
+        --text-dark: #ffffff;
+        --border: #2d2d2d;
+    }
+
+    body {
+        font-family: "Rubik", sans-serif;
+        margin: 0;
+        padding: 0;
+        transition: 0.3s ease;
+    }
+
+    body.light { background: var(--bg-light); color: var(--text-light); }
+    body.dark { background: var(--bg-dark); color: var(--text-dark); }
+
+    .container {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: var(--primary);
+    }
+
+    label {
+        font-weight: 600;
+        display: block;
+        margin-top: 18px;
+    }
+
+    input, textarea, select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        font-size: 16px;
+        margin-top: 6px;
+        background: transparent;
+        color: inherit;
+    }
+
+    .row {
+        display: flex;
+        gap: 16px;
+        margin-top: 14px;
+    }
+
+    .row > div {
+        flex: 1;
+    }
+
+    .toggle-group {
+        display: flex;
+        gap: 16px;
+        margin-top: 14px;
+        flex-wrap: wrap;
+    }
+
+    .toggle-group label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    button {
+        background: var(--primary);
+        border: none;
+        padding: 12px 18px;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 14px;
+    }
+
+    button:hover {
+        opacity: 0.9;
+    }
+
+    #output {
+        margin-top: 20px;
+        padding: 18px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        min-height: 150px;
+        white-space: pre-wrap;
+        font-size: 17px;
+    }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Faceless Script Generator</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --primary: #39ff14; /* neon green */
+        --bg-light: #ffffff;
+        --bg-dark: #0d0d0d;
+        --text-light: #0d0d0d;
+        --text-dark: #ffffff;
+        --border: #2d2d2d;
+    }
+
+    body {
+        font-family: "Rubik", sans-serif;
+        margin: 0;
+        padding: 0;
+        transition: 0.3s ease;
+    }
+
+    body.light { background: var(--bg-light); color: var(--text-light); }
+    body.dark { background: var(--bg-dark); color: var(--text-dark); }
+
+    .container {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: var(--primary);
+    }
+
+    label {
+        font-weight: 600;
+        display: block;
+        margin-top: 18px;
+    }
+
+    input, textarea, select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        font-size: 16px;
+        margin-top: 6px;
+        background: transparent;
+        color: inherit;
+    }
+
+    .row {
+        display: flex;
+        gap: 16px;
+        margin-top: 14px;
+    }
+
+    .row > div {
+        flex: 1;
+    }
+
+    .toggle-group {
+        display: flex;
+        gap: 16px;
+        margin-top: 14px;
+        flex-wrap: wrap;
+    }
+
+    .toggle-group label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    button {
+        background: var(--primary);
+        border: none;
+        padding: 12px 18px;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 14px;
+    }
+
+    button:hover {
+        opacity: 0.9;
+    }
+
+    #output {
+        margin-top: 20px;
+        padding: 18px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        min-height: 150px;
+        white-space: pre-wrap;
+        font-size: 17px;
+    }
+
+    .theme-switch {
+        float: right;
+        margin-top: 10px;
+    }
+</style>
+</head>
+<body class="light">
+
+<div class="container">
+
+    <div class="theme-switch">
+        <label>Theme:</label>
+        <select id="themeSelect">
+            <option value="auto" selected>Auto</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+        </select>
+    </div>
+
+    <h1>Faceless Script Generator</h1>
+
+    <label>Topic / Theme</label>
+    <input type="text" id="topic" placeholder="e.g. school, lag, parents, annoying friends">
+
+    <label>Paste Script (Optional)</label>
+    <textarea id="pasteText" rows="5" placeholder="Paste a rant script here to rewrite it..."></textarea>
+
+    <label>Rant Narrator</label>
+    <select id="narrator">
+        <option value="male" selected>Male</option>
+        <option value="female">Female</option>
+        <option value="neutral">Neutral</option>
+    </select>
+
+    <div class="toggle-group">
+        <label><input type="checkbox" id="slang"> Include Slang</label>
+        <label><input type="checkbox" id="spicy"> Spicy Mode (PG-13)</label>
+    </div>
+
+    <label>Gemini API Key</label>
+    <input type="password" id="apiKey" placeholder="Enter your Gemini API key">
+
+    <button id="saveKeyBtn">Save API Key</button>
+    <button id="generateBtn">Generate Rant</button>
+    <button id="rewriteBtn">Rewrite / Punch-Up</button>
+    <button id="shuffleBtn">Shuffle Variation</button>
+
+    <div id="output">Your generated script will appear here...</div>
+</div>
+
+<script>
+// Theme Auto-Detect
+const userPref = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+const body = document.body;
+const themeSelect = document.getElementById("themeSelect");
+
+function applyTheme(mode) {
+    if (mode === "auto") {
+        body.className = userPref;
+    } else {
+        body.className = mode;
+    }
+}
+applyTheme("auto");
+themeSelect.addEventListener("change", e => applyTheme(e.target.value));
+</script>
+
+</body>
+</html>
