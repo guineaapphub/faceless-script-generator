@@ -10,219 +10,114 @@
 
 <style>
     :root {
-        --primary: #39ff14; /* neon green */
-        --bg-light: #ffffff;
-        --bg-dark: #0d0d0d;
-        --text-light: #0d0d0d;
-        --text-dark: #ffffff;
-        --border: #2d2d2d;
-    }
+  --primary: #39ff14; /* neon green */
+  --bg-light: #ffffff;
+  --bg-dark: #0d0d0d;
+  --text-light: #0d0d0d;
+  --text-dark: #ffffff;
+  --border: #2d2d2d;
+}
 
-    body {
-        font-family: "Rubik", sans-serif;
-        margin: 0;
-        padding: 0;
-        transition: 0.3s ease;
-    }
+/* Light / Dark theme */
+body.light {
+  background: var(--bg-light);
+  color: var(--text-light);
+}
 
-    body.light { background: var(--bg-light); color: var(--text-light); }
-    body.dark { background: var(--bg-dark); color: var(--text-dark); }
+body.dark {
+  background: var(--bg-dark);
+  color: var(--text-dark);
+}
 
-    .container {
-        max-width: 900px;
-        margin: auto;
-        padding: 20px;
-    }
+body {
+  font-family: "Rubik", sans-serif;
+  margin: 0;
+  padding: 0;
+  transition: 0.3s ease;
+}
 
-    h1 {
-        text-align: center;
-        font-weight: 700;
-        margin-bottom: 10px;
-        color: var(--primary);
-    }
+/* Layout */
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+}
 
-    label {
-        font-weight: 600;
-        display: block;
-        margin-top: 18px;
-    }
+/* Panels */
+.panel {
+  background: rgba(255,255,255,0.05);
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 25px;
+}
 
-    input, textarea, select {
-        width: 100%;
-        padding: 10px;
-        border-radius: 6px;
-        border: 1px solid var(--border);
-        font-size: 16px;
-        margin-top: 6px;
-        background: transparent;
-        color: inherit;
-    }
+body.light .panel {
+  background: #ffffff;
+}
 
-    .row {
-        display: flex;
-        gap: 16px;
-        margin-top: 14px;
-    }
+body.dark .panel {
+  background: #111111;
+}
 
-    .row > div {
-        flex: 1;
-    }
+/* Labels & Inputs */
+label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
 
-    .toggle-group {
-        display: flex;
-        gap: 16px;
-        margin-top: 14px;
-        flex-wrap: wrap;
-    }
+input, textarea, select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: inherit;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
 
-    .toggle-group label {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-weight: 500;
-        cursor: pointer;
-    }
+/* Buttons */
+button {
+  background: var(--primary);
+  border: none;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s;
+}
 
-    button {
-        background: var(--primary);
-        border: none;
-        padding: 12px 18px;
-        border-radius: 6px;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        width: 100%;
-        margin-top: 14px;
-    }
+button:hover {
+  opacity: 0.8;
+}
 
-    button:hover {
-        opacity: 0.9;
-    }
+button.secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+}
 
-    #output {
-        margin-top: 20px;
-        padding: 18px;
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        min-height: 150px;
-        white-space: pre-wrap;
-        font-size: 17px;
-    }
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Faceless Script Generator</title>
+/* Output box */
+#output {
+  white-space: pre-wrap;
+  line-height: 1.55rem;
+  font-size: 1.05rem;
+}
 
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+/* Theme selector */
+.theme-switch {
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-<style>
-    :root {
-        --primary: #39ff14; /* neon green */
-        --bg-light: #ffffff;
-        --bg-dark: #0d0d0d;
-        --text-light: #0d0d0d;
-        --text-dark: #ffffff;
-        --border: #2d2d2d;
-    }
+select#themeSelect {
+  width: 150px;
+}
 
-    body {
-        font-family: "Rubik", sans-serif;
-        margin: 0;
-        padding: 0;
-        transition: 0.3s ease;
-    }
-
-    body.light { background: var(--bg-light); color: var(--text-light); }
-    body.dark { background: var(--bg-dark); color: var(--text-dark); }
-
-    .container {
-        max-width: 900px;
-        margin: auto;
-        padding: 20px;
-    }
-
-    h1 {
-        text-align: center;
-        font-weight: 700;
-        margin-bottom: 10px;
-        color: var(--primary);
-    }
-
-    label {
-        font-weight: 600;
-        display: block;
-        margin-top: 18px;
-    }
-
-    input, textarea, select {
-        width: 100%;
-        padding: 10px;
-        border-radius: 6px;
-        border: 1px solid var(--border);
-        font-size: 16px;
-        margin-top: 6px;
-        background: transparent;
-        color: inherit;
-    }
-
-    .row {
-        display: flex;
-        gap: 16px;
-        margin-top: 14px;
-    }
-
-    .row > div {
-        flex: 1;
-    }
-
-    .toggle-group {
-        display: flex;
-        gap: 16px;
-        margin-top: 14px;
-        flex-wrap: wrap;
-    }
-
-    .toggle-group label {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-weight: 500;
-        cursor: pointer;
-    }
-
-    button {
-        background: var(--primary);
-        border: none;
-        padding: 12px 18px;
-        border-radius: 6px;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        width: 100%;
-        margin-top: 14px;
-    }
-
-    button:hover {
-        opacity: 0.9;
-    }
-
-    #output {
-        margin-top: 20px;
-        padding: 18px;
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        min-height: 150px;
-        white-space: pre-wrap;
-        font-size: 17px;
-    }
-
-    .theme-switch {
-        float: right;
-        margin-top: 10px;
-    }
 </style>
 </head>
 <body class="light">
