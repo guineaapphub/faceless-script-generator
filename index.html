@@ -1,185 +1,688 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Faceless Script Generator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Faceless Script Generator</title>
 
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-<style>
+  <style>
     :root {
-  --primary: #39ff14; /* neon green */
-  --bg-light: #ffffff;
-  --bg-dark: #0d0d0d;
-  --text-light: #0d0d0d;
-  --text-dark: #ffffff;
-  --border: #2d2d2d;
-}
-
-/* Light / Dark theme */
-body.light {
-  background: var(--bg-light);
-  color: var(--text-light);
-}
-
-body.dark {
-  background: var(--bg-dark);
-  color: var(--text-dark);
-}
-
-body {
-  font-family: "Rubik", sans-serif;
-  margin: 0;
-  padding: 0;
-  transition: 0.3s ease;
-}
-
-/* Layout */
-.container {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
-}
-
-/* Panels */
-.panel {
-  background: rgba(255,255,255,0.05);
-  padding: 20px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  margin-bottom: 25px;
-}
-
-body.light .panel {
-  background: #ffffff;
-}
-
-body.dark .panel {
-  background: #111111;
-}
-
-/* Labels & Inputs */
-label {
-  font-weight: 600;
-  margin-bottom: 8px;
-  display: block;
-}
-
-input, textarea, select {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: inherit;
-  font-size: 15px;
-  margin-bottom: 20px;
-}
-
-/* Buttons */
-button {
-  background: var(--primary);
-  border: none;
-  padding: 12px 18px;
-  border-radius: 8px;
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 15px;
-  transition: 0.2s;
-}
-
-button:hover {
-  opacity: 0.8;
-}
-
-button.secondary {
-  background: transparent;
-  border: 1px solid var(--border);
-}
-
-/* Output box */
-#output {
-  white-space: pre-wrap;
-  line-height: 1.55rem;
-  font-size: 1.05rem;
-}
-
-/* Theme selector */
-.theme-switch {
-  margin-bottom: 25px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-select#themeSelect {
-  width: 150px;
-}
-
-</style>
-</head>
-<body class="light">
-
-<div class="container">
-
-    <div class="theme-switch">
-        <label>Theme:</label>
-        <select id="themeSelect">
-            <option value="auto" selected>Auto</option>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-        </select>
-    </div>
-
-    <h1>Faceless Script Generator</h1>
-
-    <label>Topic / Theme</label>
-    <input type="text" id="topic" placeholder="e.g. school, lag, parents, annoying friends">
-
-    <label>Paste Script (Optional)</label>
-    <textarea id="pasteText" rows="5" placeholder="Paste a rant script here to rewrite it..."></textarea>
-
-    <label>Rant Narrator</label>
-    <select id="narrator">
-        <option value="male" selected>Male</option>
-        <option value="female">Female</option>
-        <option value="neutral">Neutral</option>
-    </select>
-
-    <div class="toggle-group">
-        <label><input type="checkbox" id="slang"> Include Slang</label>
-        <label><input type="checkbox" id="spicy"> Spicy Mode (PG-13)</label>
-    </div>
-
-    <label>Gemini API Key</label>
-    <input type="password" id="apiKey" placeholder="Enter your Gemini API key">
-
-    <button id="saveKeyBtn">Save API Key</button>
-    <button id="generateBtn">Generate Rant</button>
-    <button id="rewriteBtn">Rewrite / Punch-Up</button>
-    <button id="shuffleBtn">Shuffle Variation</button>
-
-    <div id="output">Your generated script will appear here...</div>
-</div>
-
-<script>
-// Theme Auto-Detect
-const userPref = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-const body = document.body;
-const themeSelect = document.getElementById("themeSelect");
-
-function applyTheme(mode) {
-    if (mode === "auto") {
-        body.className = userPref;
-    } else {
-        body.className = mode;
+      --primary: #39ff14; /* neon green */
+      --bg-light: #ffffff;
+      --bg-dark: #0d0d0d;
+      --text-light: #0d0d0d;
+      --text-dark: #ffffff;
+      --border: #2d2d2d;
     }
-}
-applyTheme("auto");
-themeSelect.addEventListener("change", e => applyTheme(e.target.value));
-</script>
 
+    body.light {
+      background: var(--bg-light);
+      color: var(--text-light);
+    }
+
+    body.dark {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    body {
+      font-family: "Rubik", sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: 0.3s ease;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 16px 40px;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 6px;
+      text-shadow: 0 0 8px rgba(57,255,20,0.5);
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 14px;
+      opacity: 0.8;
+      margin-bottom: 22px;
+    }
+
+    .panel {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 18px 18px 20px;
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    body.dark .panel {
+      background: #111111;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: block;
+      font-size: 14px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: inherit;
+      font-size: 14px;
+      margin-bottom: 14px;
+      box-sizing: border-box;
+      outline: none;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 8px rgba(57,255,20,0.4);
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 4px;
+      margin-bottom: 6px;
+    }
+
+    .row > .col {
+      flex: 1 1 180px;
+    }
+
+    .slider-label {
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .slider-value {
+      font-size: 12px;
+      opacity: 0.75;
+      margin-top: 2px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+    }
+
+    .toggles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .toggles label {
+      font-weight: 500;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      margin-bottom: 0;
+    }
+
+    button {
+      border: none;
+      padding: 11px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.2s;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #000;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: inherit;
+      border: 1px solid var(--border);
+    }
+
+    button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+      box-shadow: 0 0 8px rgba(57,255,20,0.3);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    #output {
+      white-space: pre-wrap;
+      line-height: 1.55rem;
+      font-size: 1.02rem;
+      min-height: 140px;
+    }
+
+    .theme-switch {
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    select#themeSelect {
+      width: 140px;
+    }
+
+    /* API accordion */
+    .api-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .api-header span:last-child {
+      font-size: 18px;
+    }
+
+    .api-body {
+      margin-top: 10px;
+      display: none;
+    }
+
+    .api-body.open {
+      display: block;
+    }
+
+    .api-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .api-row input {
+      flex: 1 1 220px;
+      margin-bottom: 0;
+    }
+
+    .api-help {
+      font-size: 12px;
+      margin-top: 6px;
+      opacity: 0.85;
+    }
+
+    .api-help a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .api-status {
+      font-size: 12px;
+      margin-top: 6px;
+      min-height: 16px;
+    }
+
+    .api-status.ok {
+      color: #2e7d32;
+    }
+
+    .api-status.err {
+      color: #c62828;
+    }
+
+    @media (max-width: 600px) {
+      .button-row {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body class="light">
+  <div class="container">
+    <div class="theme-switch">
+      <span>Theme:</span>
+      <select id="themeSelect">
+        <option value="auto" selected>Auto</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+    </div>
+
+    <h1>Roblox Rant Generator</h1>
+    <div class="subtitle">Generate viral-style Roblox rant scripts inspired by WebSim — powered by your own Gemini API key.</div>
+
+    <!-- MAIN CONTROLS -->
+    <div class="panel">
+      <label for="topicInput">Topic / Theme</label>
+      <input id="topicInput" type="text" placeholder="e.g. school, lag, strict parents, annoying friends, adulting, social media" />
+
+      <label for="pasteInput">Paste Your Rant Script Here (optional)</label>
+      <textarea id="pasteInput" placeholder="Paste any rant script here to rewrite &amp; improve it in a Roblox-rant style..."></textarea>
+
+      <label for="narratorSelect">Rant Narrator</label>
+      <select id="narratorSelect">
+        <option value="male" selected>Male Rant Narrator</option>
+        <option value="neutral">Gender-neutral Narrator</option>
+        <option value="female">Slightly Sassy / Feminine Narrator</option>
+      </select>
+
+      <div class="row">
+        <div class="col">
+          <div class="slider-label">Intensity</div>
+          <input id="intensitySlider" type="range" min="1" max="4" value="2" />
+          <div id="intensityLabel" class="slider-value">Cool</div>
+        </div>
+        <div class="col">
+          <div class="slider-label">Length</div>
+          <input id="lengthSlider" type="range" min="1" max="4" value="2" />
+          <div id="lengthLabel" class="slider-value">Medium rant</div>
+        </div>
+      </div>
+
+      <div class="toggles">
+        <label><input id="includeSlang" type="checkbox" checked /> Include slang</label>
+        <label><input id="spicyMode" type="checkbox" /> Spicy Mode (PG-13)</label>
+      </div>
+
+      <div class="button-row">
+        <button id="generateBtn" class="btn-primary">Generate Rant</button>
+        <button id="rewriteBtn" class="btn-secondary">Rewrite &amp; Improve</button>
+        <button id="shuffleBtn" class="btn-secondary">Shuffle Variation</button>
+        <button id="punchierBtn" class="btn-secondary">Make It Punchier™</button>
+        <button id="copyBtn" class="btn-secondary">Copy Script</button>
+      </div>
+    </div>
+
+    <!-- GEMINI API SETTINGS (COLLAPSIBLE) -->
+    <div class="panel">
+      <div id="apiHeader" class="api-header">
+        <span>Gemini API Settings</span>
+        <span id="apiChevron">▼</span>
+      </div>
+
+      <div id="apiBody" class="api-body">
+        <div class="api-row">
+          <input id="apiKeyInput" type="password" placeholder="Enter your Gemini API key" />
+          <button id="saveKeyBtn" class="btn-secondary" style="flex:0 0 auto;">Save Key</button>
+          <button id="clearKeyBtn" class="btn-secondary" style="flex:0 0 auto;">Clear</button>
+        </div>
+        <div class="api-help">
+          Don’t have a Gemini API key?
+          <a href="https://aistudio.google.com/app/api-keys" target="_blank" rel="noopener noreferrer">
+            Get your Gemini API key here →
+          </a>
+        </div>
+        <div id="apiStatus" class="api-status"></div>
+      </div>
+    </div>
+
+    <!-- OUTPUT -->
+    <div class="panel">
+      <label>Generated Rant Script</label>
+      <div id="output">Your rant will appear here...</div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- THEME HANDLING ----------
+    const themeSelect = document.getElementById('themeSelect');
+    const savedTheme = localStorage.getItem('fsg-theme') || 'auto';
+
+    function applyTheme(mode) {
+      document.body.classList.remove('light', 'dark');
+      if (mode === 'auto') {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.body.classList.add(prefersDark ? 'dark' : 'light');
+      } else {
+        document.body.classList.add(mode);
+      }
+    }
+
+    themeSelect.value = savedTheme;
+    applyTheme(savedTheme);
+
+    themeSelect.addEventListener('change', () => {
+      const val = themeSelect.value;
+      localStorage.setItem('fsg-theme', val);
+      applyTheme(val);
+    });
+
+    // ---------- SLIDER LABELS ----------
+    const intensitySlider = document.getElementById('intensitySlider');
+    const lengthSlider = document.getElementById('lengthSlider');
+    const intensityLabel = document.getElementById('intensityLabel');
+    const lengthLabel = document.getElementById('lengthLabel');
+
+    function updateIntensityLabel() {
+      const v = Number(intensitySlider.value);
+      if (v === 1) intensityLabel.textContent = 'Very chill';
+      else if (v === 2) intensityLabel.textContent = 'Cool';
+      else if (v === 3) intensityLabel.textContent = 'Salty';
+      else intensityLabel.textContent = 'Full meltdown';
+    }
+
+    function updateLengthLabel() {
+      const v = Number(lengthSlider.value);
+      if (v === 1) lengthLabel.textContent = 'Short rant';
+      else if (v === 2) lengthLabel.textContent = 'Medium rant';
+      else if (v === 3) lengthLabel.textContent = 'Long rant';
+      else lengthLabel.textContent = 'Max rant';
+    }
+
+    intensitySlider.addEventListener('input', updateIntensityLabel);
+    lengthSlider.addEventListener('input', updateLengthLabel);
+    updateIntensityLabel();
+    updateLengthLabel();
+
+    // ---------- API PANEL (COLLAPSIBLE) ----------
+    const apiHeader = document.getElementById('apiHeader');
+    const apiBody = document.getElementById('apiBody');
+    const apiChevron = document.getElementById('apiChevron');
+
+    apiHeader.addEventListener('click', () => {
+      const open = apiBody.classList.toggle('open');
+      apiChevron.textContent = open ? '▲' : '▼';
+    });
+
+    // ---------- GEMINI API KEY STORAGE ----------
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    const apiStatus = document.getElementById('apiStatus');
+    const saveKeyBtn = document.getElementById('saveKeyBtn');
+    const clearKeyBtn = document.getElementById('clearKeyBtn');
+
+    function getApiKey() {
+      return localStorage.getItem('fsg-gemini-key') || '';
+    }
+
+    function showStatus(msg, type) {
+      apiStatus.textContent = msg;
+      apiStatus.className = 'api-status ' + (type || '');
+    }
+
+    // Load existing key
+    const storedKey = getApiKey();
+    if (storedKey) {
+      apiKeyInput.value = storedKey;
+      showStatus('Gemini API key loaded from your browser.', 'ok');
+      apiBody.classList.add('open');
+      apiChevron.textContent = '▲';
+    }
+
+    saveKeyBtn.addEventListener('click', () => {
+      const key = apiKeyInput.value.trim();
+      if (!key) {
+        showStatus('Please enter a valid Gemini API key.', 'err');
+        return;
+      }
+      localStorage.setItem('fsg-gemini-key', key);
+      showStatus('API key saved in your browser (local only).', 'ok');
+    });
+
+    clearKeyBtn.addEventListener('click', () => {
+      localStorage.removeItem('fsg-gemini-key');
+      apiKeyInput.value = '';
+      showStatus('API key cleared. Add one to use AI features.', 'err');
+    });
+
+    // ---------- GEMINI CALL HELPER ----------
+    async function callGemini(promptText) {
+      const key = getApiKey();
+      if (!key) {
+        showStatus('Add your Gemini API key to generate AI rants.', 'err');
+        throw new Error('No API key');
+      }
+
+      showStatus('Talking to Gemini...', '');
+      const body = {
+        contents: [{ parts: [{ text: promptText }] }]
+      };
+
+      const resp = await fetch(
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' +
+          encodeURIComponent(key),
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        }
+      );
+
+      if (!resp.ok) {
+        const text = await resp.text();
+        console.error('Gemini error', resp.status, text);
+        showStatus('Gemini error: ' + resp.status, 'err');
+        throw new Error('Gemini error');
+      }
+
+      const data = await resp.json();
+      const out =
+        data?.candidates?.[0]?.content?.parts?.[0]?.text || '(No response text from Gemini)';
+      showStatus('AI response received.', 'ok');
+      return out.trim();
+    }
+
+    // ---------- PROMPT BUILDER ----------
+    function buildBaseInstructions() {
+      return `
+You are an expert in Roblox-style rant commentary, Gen-Z storytelling, and viral short-form scripts.
+Write in the voice of a fast-paced Roblox rant narrator talking directly to camera, like a TikTok or YouTube Shorts creator.
+
+GENERAL RULES:
+- Every rant MUST start with the phrase: "I'm starting to realize..."
+- Style: fast-paced monologue, short sentences, comedic timing.
+- Tone: relatable frustration, humorous exaggeration, slightly dramatic.
+- Include one clear scenario or mini-story that feels real.
+- Build frustration gradually and repeat a short phrase once or twice for comedic effect.
+- End with an ironic or funny twist, or a self-aware final line.
+- Do NOT use emojis. Do NOT use hashtags. Just one block of monologue text.
+
+SAFETY RULES (ALWAYS):
+- No slurs, hate speech, or discrimination.
+- No explicit sexual content.
+- No self-harm threats, graphic violence, or real-world harm.
+- Do not attack real individuals or real-life groups.
+- Keep everything within YouTube and TikTok ad-friendly boundaries.
+`;
+    }
+
+    function buildRantPrompt(mode) {
+      const topic = document.getElementById('topicInput').value.trim();
+      const pasted = document.getElementById('pasteInput').value.trim();
+      const intensity = Number(intensitySlider.value);
+      const lengthVal = Number(lengthSlider.value);
+      const includeSlang = document.getElementById('includeSlang').checked;
+      const spicy = document.getElementById('spicyMode').checked;
+      const narrator = document.getElementById('narratorSelect').value;
+      const outputText = document.getElementById('output').innerText.trim();
+
+      let intensityLabel = 'Cool';
+      if (intensity === 1) intensityLabel = 'Very chill';
+      else if (intensity === 2) intensityLabel = 'Cool';
+      else if (intensity === 3) intensityLabel = 'Salty';
+      else intensityLabel = 'Full meltdown';
+
+      let lengthLabel = 'medium';
+      if (lengthVal === 1) lengthLabel = 'short';
+      else if (lengthVal === 2) lengthLabel = 'medium';
+      else if (lengthVal === 3) lengthLabel = 'long';
+      else lengthLabel = 'extended';
+
+      let narratorDesc = 'a gender-neutral narrator';
+      if (narrator === 'male') narratorDesc = 'a male Roblox rant narrator';
+      else if (narrator === 'female') narratorDesc = 'a slightly sassy feminine rant narrator';
+
+      let styleBlock = `
+STYLE SETTINGS:
+- Narrator: ${narratorDesc}.
+- Intensity level: ${intensityLabel}.
+- Length: ${lengthLabel} rant (roughly 30–90 seconds when read out loud).
+`;
+
+      if (includeSlang) {
+        styleBlock +=
+          '- Use modern Gen-Z and gamer slang naturally, but not in every single sentence.\n';
+      } else {
+        styleBlock += '- Use casual modern language, but avoid heavy slang.\n';
+      }
+
+      if (spicy) {
+        styleBlock += `
+- Spicy Mode is ON: you may use light PG-13 frustration language like "damn", "heck", "this sucks", "bro what".
+- Do NOT use the F-word or any explicit heavy profanity.
+`;
+      } else {
+        styleBlock += `
+- Spicy Mode is OFF: no profanity. Express frustration using clean language only.
+`;
+      }
+
+      let taskBlock = '';
+
+      if (mode === 'generate') {
+        const safeTopic =
+          topic || 'something in life that feels annoying, inconvenient, or ironically funny';
+        taskBlock = `
+TASK:
+Write one Roblox-style rant script starting with "I'm starting to realize..." about this topic:
+"${safeTopic}"
+
+Do NOT mention that you are an AI. Just write the rant as if you are the creator talking directly to the viewer.
+`;
+      } else if (mode === 'rewrite') {
+        const baseText = pasted || outputText || '(no script provided)';
+        taskBlock = `
+TASK:
+Rewrite and improve the following rant script.
+
+Goals:
+- Keep the same main idea and emotion.
+- Make the pacing snappier and more viral.
+- Strengthen the hook and comedic escalation.
+- Improve punchlines and the ending.
+- Keep it as a Roblox/TikTok-style rant.
+
+Original script:
+"""${baseText}"""
+`;
+      } else if (mode === 'shuffle') {
+        const safeTopic =
+          topic ||
+          'a general chaotic life situation (school, parents, friends, work, money, social media)';
+        taskBlock = `
+TASK:
+Create a DIFFERENT variation of a rant on this topic:
+"${safeTopic}"
+
+Keep the same overall frustration but change the angle, examples, and lines so it feels fresh and unique.
+`;
+      } else if (mode === 'punchier') {
+        const baseText = pasted || outputText || '(no script provided)';
+        taskBlock = `
+TASK:
+Take the following rant script and make it punchier, tighter, and more viral.
+
+Focus on:
+- Stronger opening hook.
+- Shorter, sharper sentences.
+- Clearer escalation in frustration.
+- Funnier or more self-aware last line.
+
+Script to punch up:
+"""${baseText}"""
+`;
+      }
+
+      return buildBaseInstructions() + '\n' + styleBlock + '\n' + taskBlock;
+    }
+
+    // ---------- BUTTON HANDLERS ----------
+    const outputEl = document.getElementById('output');
+
+    async function handleGenerate() {
+      try {
+        const prompt = buildRantPrompt('generate');
+        const text = await callGemini(prompt);
+        outputEl.textContent = text;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function handleRewrite() {
+      try {
+        const prompt = buildRantPrompt('rewrite');
+        const text = await callGemini(prompt);
+        outputEl.textContent = text;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function handleShuffle() {
+      try {
+        const prompt = buildRantPrompt('shuffle');
+        const text = await callGemini(prompt);
+        outputEl.textContent = text;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function handlePunchier() {
+      try {
+        const prompt = buildRantPrompt('punchier');
+        const text = await callGemini(prompt);
+        outputEl.textContent = text;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function handleCopy() {
+      const txt = outputEl.textContent || '';
+      if (!txt.trim()) return;
+      navigator.clipboard.writeText(txt);
+    }
+
+    document.getElementById('generateBtn').addEventListener('click', handleGenerate);
+    document.getElementById('rewriteBtn').addEventListener('click', handleRewrite);
+    document.getElementById('shuffleBtn').addEventListener('click', handleShuffle);
+    document.getElementById('punchierBtn').addEventListener('click', handlePunchier);
+    document.getElementById('copyBtn').addEventListener('click', handleCopy);
+  </script>
 </body>
 </html>
