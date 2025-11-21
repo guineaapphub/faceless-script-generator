@@ -11,11 +11,14 @@
   <style>
     :root {
       --primary: #39ff14; /* neon green */
+      --primary-glow: rgba(57,255,20,0.5);
       --bg-light: #ffffff;
       --bg-dark: #0d0d0d;
       --text-light: #0d0d0d;
       --text-dark: #ffffff;
       --border: #2d2d2d;
+      --card-light: #ffffff;
+      --card-dark: #111111;
     }
 
     body.light {
@@ -45,19 +48,33 @@
       text-align: center;
       color: var(--primary);
       font-weight: 700;
-      margin-bottom: 6px;
-      text-shadow: 0 0 8px rgba(57,255,20,0.5);
+      margin-bottom: 4px;
+      text-shadow: 0 0 8px var(--primary-glow);
     }
 
     .subtitle {
       text-align: center;
       font-size: 14px;
-      opacity: 0.8;
+      opacity: 0.85;
       margin-bottom: 22px;
     }
 
+    /* Ad banner placeholder */
+    .ad-box {
+      width: 100%;
+      min-height: 90px;
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      margin: 16px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.7;
+      font-size: 13px;
+    }
+
     .panel {
-      background: #ffffff;
+      background: var(--card-light);
       border-radius: 14px;
       padding: 18px 18px 20px;
       border: 1px solid var(--border);
@@ -65,7 +82,7 @@
     }
 
     body.dark .panel {
-      background: #111111;
+      background: var(--card-dark);
     }
 
     label {
@@ -100,7 +117,7 @@
     textarea:focus,
     select:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 8px rgba(57,255,20,0.4);
+      box-shadow: 0 0 8px var(--primary-glow);
     }
 
     .row {
@@ -173,7 +190,7 @@
     button:hover {
       opacity: 0.9;
       transform: translateY(-1px);
-      box-shadow: 0 0 8px rgba(57,255,20,0.3);
+      box-shadow: 0 0 8px var(--primary-glow);
     }
 
     .button-row {
@@ -273,6 +290,7 @@
 
 <body class="light">
   <div class="container">
+
     <div class="theme-switch">
       <span>Theme:</span>
       <select id="themeSelect">
@@ -283,7 +301,10 @@
     </div>
 
     <h1>Roblox Rant Generator</h1>
-    <div class="subtitle">Generate viral-style Roblox rant scripts inspired by WebSim — powered by your own Gemini API key.</div>
+    <div class="subtitle">Type your theme, build your rant, bye-bye noob.</div>
+
+    <!-- AD PLACEMENT TOP -->
+    <div class="ad-box">Ad Placeholder — Top Banner</div>
 
     <!-- MAIN CONTROLS -->
     <div class="panel">
@@ -299,13 +320,13 @@
         <option value="neutral">Gender-neutral Narrator</option>
         <option value="female">Slightly Sassy / Feminine Narrator</option>
       </select>
-
       <div class="row">
         <div class="col">
           <div class="slider-label">Intensity</div>
           <input id="intensitySlider" type="range" min="1" max="4" value="2" />
           <div id="intensityLabel" class="slider-value">Cool</div>
         </div>
+
         <div class="col">
           <div class="slider-label">Length</div>
           <input id="lengthSlider" type="range" min="1" max="4" value="2" />
@@ -322,10 +343,13 @@
         <button id="generateBtn" class="btn-primary">Generate Rant</button>
         <button id="rewriteBtn" class="btn-secondary">Rewrite &amp; Improve</button>
         <button id="shuffleBtn" class="btn-secondary">Shuffle Variation</button>
-        <button id="punchierBtn" class="btn-secondary">Make It Punchier™</button>
+        <button id="punchierBtn" class="btn-secondary">Make it unique</button>
         <button id="copyBtn" class="btn-secondary">Copy Script</button>
       </div>
     </div>
+
+    <!-- AD PLACEMENT MIDDLE -->
+    <div class="ad-box">Ad Placeholder — Mid Content</div>
 
     <!-- GEMINI API SETTINGS (COLLAPSIBLE) -->
     <div class="panel">
@@ -340,12 +364,17 @@
           <button id="saveKeyBtn" class="btn-secondary" style="flex:0 0 auto;">Save Key</button>
           <button id="clearKeyBtn" class="btn-secondary" style="flex:0 0 auto;">Clear</button>
         </div>
+
         <div class="api-help">
-          Don’t have a Gemini API key?
+          To get your Gemini API Key, visit Google AI Studio.  
+          Click "Get API Key" and then "Create API Key".  
+          Your key is stored securely in your browser's local storage.  
+          <br><br>
           <a href="https://aistudio.google.com/app/api-keys" target="_blank" rel="noopener noreferrer">
             Get your Gemini API key here →
           </a>
         </div>
+
         <div id="apiStatus" class="api-status"></div>
       </div>
     </div>
@@ -355,8 +384,37 @@
       <label>Generated Rant Script</label>
       <div id="output">Your rant will appear here...</div>
     </div>
-  </div>
 
+    <!-- AD PLACEMENT BOTTOM -->
+    <div class="ad-box">Ad Placeholder — Footer Banner</div>
+
+    <!-- FOOTER WITH DISCORD BUTTON -->
+    <div style="text-align:center; margin-top:20px;">
+      <a
+        href="https://discord.gg/DTnK3wmve3"
+        target="_blank"
+        rel="noopener noreferrer"
+        style="
+          display:inline-block;
+          padding:10px 16px;
+          background:var(--primary);
+          color:#000;
+          border-radius:8px;
+          font-weight:700;
+          text-decoration:none;
+          box-shadow:0 0 6px var(--primary-glow);
+          transition:0.2s;
+        "
+        onmouseover="this.style.opacity='0.85'"
+        onmouseout="this.style.opacity='1'"
+      >
+        Join the community →
+      </a>
+    </div>
+
+  </div> <!-- END CONTAINER -->
+
+  <!-- JAVASCRIPT -->
   <script>
     // ---------- THEME HANDLING ----------
     const themeSelect = document.getElementById('themeSelect');
@@ -398,7 +456,7 @@
     function updateLengthLabel() {
       const v = Number(lengthSlider.value);
       if (v === 1) lengthLabel.textContent = 'Short rant';
-      else if (v === 2) lengthLabel.textContent = 'Medium rant';
+      else if (v === 2) length.textContent = 'Medium rant';
       else if (v === 3) lengthLabel.textContent = 'Long rant';
       else lengthLabel.textContent = 'Max rant';
     }
@@ -457,7 +515,6 @@
       apiKeyInput.value = '';
       showStatus('API key cleared. Add one to use AI features.', 'err');
     });
-
     // ---------- GEMINI CALL HELPER ----------
     async function callGemini(promptText) {
       const key = getApiKey();
@@ -498,24 +555,17 @@
     // ---------- PROMPT BUILDER ----------
     function buildBaseInstructions() {
       return `
-You are an expert in Roblox-style rant commentary, Gen-Z storytelling, and viral short-form scripts.
-Write in the voice of a fast-paced Roblox rant narrator talking directly to camera, like a TikTok or YouTube Shorts creator.
+You are an expert Roblox-style rant narrator with fast pacing, Gen-Z humor, dramatic buildup, and punchy lines.
+You ALWAYS start with "I'm starting to realize..."
+You write short, sharp, fast, rhythmic sentences — like a TikTok or YouTube Shorts rant creator.
+You NEVER use emojis. You NEVER use hashtags.
+You NEVER break character. You NEVER mention you're an AI.
 
-GENERAL RULES:
-- Every rant MUST start with the phrase: "I'm starting to realize..."
-- Style: fast-paced monologue, short sentences, comedic timing.
-- Tone: relatable frustration, humorous exaggeration, slightly dramatic.
-- Include one clear scenario or mini-story that feels real.
-- Build frustration gradually and repeat a short phrase once or twice for comedic effect.
-- End with an ironic or funny twist, or a self-aware final line.
-- Do NOT use emojis. Do NOT use hashtags. Just one block of monologue text.
-
-SAFETY RULES (ALWAYS):
-- No slurs, hate speech, or discrimination.
-- No explicit sexual content.
-- No self-harm threats, graphic violence, or real-world harm.
-- Do not attack real individuals or real-life groups.
-- Keep everything within YouTube and TikTok ad-friendly boundaries.
+Mandatory safety:
+- No slurs, hate speech, bullying, or discrimination.
+- No explicit sexual content or adult themes.
+- No self-harm, threats, or graphic violence.
+- PG-13 language ONLY unless spicy mode is on.
 `;
     }
 
@@ -539,7 +589,7 @@ SAFETY RULES (ALWAYS):
       if (lengthVal === 1) lengthLabel = 'short';
       else if (lengthVal === 2) lengthLabel = 'medium';
       else if (lengthVal === 3) lengthLabel = 'long';
-      else lengthLabel = 'extended';
+      else lengthLabel = 'extra long';
 
       let narratorDesc = 'a gender-neutral narrator';
       if (narrator === 'male') narratorDesc = 'a male Roblox rant narrator';
@@ -548,25 +598,24 @@ SAFETY RULES (ALWAYS):
       let styleBlock = `
 STYLE SETTINGS:
 - Narrator: ${narratorDesc}.
-- Intensity level: ${intensityLabel}.
-- Length: ${lengthLabel} rant (roughly 30–90 seconds when read out loud).
+- Intensity: ${intensityLabel}.
+- Rant length: ${lengthLabel}.
 `;
 
       if (includeSlang) {
-        styleBlock +=
-          '- Use modern Gen-Z and gamer slang naturally, but not in every single sentence.\n';
+        styleBlock += '- Allow Gen-Z slang when natural.\n';
       } else {
-        styleBlock += '- Use casual modern language, but avoid heavy slang.\n';
+        styleBlock += '- Avoid heavy slang.\n';
       }
 
       if (spicy) {
         styleBlock += `
-- Spicy Mode is ON: you may use light PG-13 frustration language like "damn", "heck", "this sucks", "bro what".
-- Do NOT use the F-word or any explicit heavy profanity.
+- Spicy Mode ON: allow mild PG-13 frustration words like "damn", "heck", "bro what".
+- No F-bombs or explicit profanity.
 `;
       } else {
         styleBlock += `
-- Spicy Mode is OFF: no profanity. Express frustration using clean language only.
+- Spicy Mode OFF: clean frustration only — no profanity.
 `;
       }
 
@@ -574,54 +623,48 @@ STYLE SETTINGS:
 
       if (mode === 'generate') {
         const safeTopic =
-          topic || 'something in life that feels annoying, inconvenient, or ironically funny';
+          topic || 'a chaotic real-life situation (school, parents, friends, work, money, social media)';
         taskBlock = `
 TASK:
-Write one Roblox-style rant script starting with "I'm starting to realize..." about this topic:
+Write a Roblox-style rant starting with "I'm starting to realize..." about:
 "${safeTopic}"
 
-Do NOT mention that you are an AI. Just write the rant as if you are the creator talking directly to the viewer.
+Make it fast, funny, relatable, escalating, and creator-ready.
 `;
-      } else if (mode === 'rewrite') {
+      }
+
+      else if (mode === 'rewrite') {
         const baseText = pasted || outputText || '(no script provided)';
         taskBlock = `
 TASK:
 Rewrite and improve the following rant script.
-
-Goals:
-- Keep the same main idea and emotion.
-- Make the pacing snappier and more viral.
-- Strengthen the hook and comedic escalation.
-- Improve punchlines and the ending.
-- Keep it as a Roblox/TikTok-style rant.
+Keep the same theme, but make it more viral, punchier, cleaner, and Roblox-rant style.
 
 Original script:
 """${baseText}"""
 `;
-      } else if (mode === 'shuffle') {
+      }
+
+      else if (mode === 'shuffle') {
         const safeTopic =
           topic ||
-          'a general chaotic life situation (school, parents, friends, work, money, social media)';
+          'a relatable chaotic life situation (school, friends, parents, lag, chores, adulting)';
         taskBlock = `
 TASK:
-Create a DIFFERENT variation of a rant on this topic:
+Create a DIFFERENT variation of a rant about:
 "${safeTopic}"
 
-Keep the same overall frustration but change the angle, examples, and lines so it feels fresh and unique.
+New angle, new jokes, new mini-story — same theme, fresh result.
 `;
-      } else if (mode === 'punchier') {
+      }
+
+      else if (mode === 'punchier') {
         const baseText = pasted || outputText || '(no script provided)';
         taskBlock = `
 TASK:
-Take the following rant script and make it punchier, tighter, and more viral.
+Make this script more unique, punchy, tight, and viral.
 
-Focus on:
-- Stronger opening hook.
-- Shorter, sharper sentences.
-- Clearer escalation in frustration.
-- Funnier or more self-aware last line.
-
-Script to punch up:
+Script:
 """${baseText}"""
 `;
       }
@@ -684,5 +727,6 @@ Script to punch up:
     document.getElementById('punchierBtn').addEventListener('click', handlePunchier);
     document.getElementById('copyBtn').addEventListener('click', handleCopy);
   </script>
+
 </body>
 </html>
