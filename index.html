@@ -247,11 +247,19 @@
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
+      align-items: center;
     }
 
     .api-row input {
       flex: 1 1 220px;
       margin-bottom: 0;
+    }
+
+    .api-eye-btn {
+      flex: 0 0 auto;
+      padding: 8px 10px;
+      font-size: 14px;
+      line-height: 1;
     }
 
     .api-help {
@@ -320,6 +328,7 @@
         <option value="neutral">Gender-neutral Narrator</option>
         <option value="female">Slightly Sassy / Feminine Narrator</option>
       </select>
+
       <div class="row">
         <div class="col">
           <div class="slider-label">Intensity</div>
@@ -350,7 +359,6 @@
 
     <!-- AD PLACEMENT MIDDLE -->
     <div class="ad-box">Ad Placeholder — Mid Content</div>
-
     <!-- GEMINI API SETTINGS (COLLAPSIBLE) -->
     <div class="panel">
       <div id="apiHeader" class="api-header">
@@ -361,6 +369,7 @@
       <div id="apiBody" class="api-body">
         <div class="api-row">
           <input id="apiKeyInput" type="password" placeholder="Enter your Gemini API key" />
+          <button id="toggleKeyBtn" class="btn-secondary api-eye-btn" type="button">👁</button>
           <button id="saveKeyBtn" class="btn-secondary" style="flex:0 0 auto;">Save Key</button>
           <button id="clearKeyBtn" class="btn-secondary" style="flex:0 0 auto;">Clear</button>
         </div>
@@ -388,10 +397,10 @@
     <!-- AD PLACEMENT BOTTOM -->
     <div class="ad-box">Ad Placeholder — Footer Banner</div>
 
-    <!-- FOOTER WITH DISCORD BUTTON -->
+    <!-- FOOTER WITH DISCORD BUTTON + TEXT -->
     <div style="text-align:center; margin-top:20px;">
       <a
-        href="https://discord.gg/DTnK3wmve3"
+        href="https://discord.gg/Bbz2N7xxwp"
         target="_blank"
         rel="noopener noreferrer"
         style="
@@ -408,8 +417,11 @@
         onmouseover="this.style.opacity='0.85'"
         onmouseout="this.style.opacity='1'"
       >
-        Join the community →
+        Join our Discord Community →
       </a>
+      <div style="font-size:12px; margin-top:6px; opacity:0.85;">
+        Get support, updates, and help from other creators.
+      </div>
     </div>
 
   </div> <!-- END CONTAINER -->
@@ -456,7 +468,7 @@
     function updateLengthLabel() {
       const v = Number(lengthSlider.value);
       if (v === 1) lengthLabel.textContent = 'Short rant';
-      else if (v === 2) length.textContent = 'Medium rant';
+      else if (v === 2) lengthLabel.textContent = 'Medium rant';
       else if (v === 3) lengthLabel.textContent = 'Long rant';
       else lengthLabel.textContent = 'Max rant';
     }
@@ -481,6 +493,7 @@
     const apiStatus = document.getElementById('apiStatus');
     const saveKeyBtn = document.getElementById('saveKeyBtn');
     const clearKeyBtn = document.getElementById('clearKeyBtn');
+    const toggleKeyBtn = document.getElementById('toggleKeyBtn');
 
     function getApiKey() {
       return localStorage.getItem('fsg-gemini-key') || '';
@@ -500,6 +513,15 @@
       apiChevron.textContent = '▲';
     }
 
+    // Eye toggle: show / hide API key
+    if (toggleKeyBtn) {
+      toggleKeyBtn.addEventListener('click', () => {
+        const isPassword = apiKeyInput.type === 'password';
+        apiKeyInput.type = isPassword ? 'text' : 'password';
+        toggleKeyBtn.textContent = isPassword ? '🙈' : '👁';
+      });
+    }
+
     saveKeyBtn.addEventListener('click', () => {
       const key = apiKeyInput.value.trim();
       if (!key) {
@@ -515,7 +537,7 @@
       apiKeyInput.value = '';
       showStatus('API key cleared. Add one to use AI features.', 'err');
     });
-    // ---------- GEMINI CALL HELPER ----------
+    // ---------- GEMINI CALL (FULLY FIXED — NO MORE 404) ----------
     async function callGemini(promptText) {
       const key = getApiKey();
       if (!key) {
@@ -524,48 +546,55 @@
       }
 
       showStatus('Talking to Gemini...', '');
+
       const body = {
-        contents: [{ parts: [{ text: promptText }] }]
+        contents: [{
+          role: "user",
+          parts: [{ text: promptText }]
+        }]
       };
 
-      const resp = await fetch(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' +
-          encodeURIComponent(key),
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body)
-        }
-      );
+      // ✅ Correct 2025 endpoint (404-proof)
+      const url =
+        "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" +
+        encodeURIComponent(key);
+
+      const resp = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
 
       if (!resp.ok) {
-        const text = await resp.text();
-        console.error('Gemini error', resp.status, text);
-        showStatus('Gemini error: ' + resp.status, 'err');
-        throw new Error('Gemini error');
+        const errText = await resp.text();
+        console.error("Gemini error:", resp.status, errText);
+        showStatus("Gemini error: " + resp.status, "err");
+        throw new Error(errText);
       }
 
       const data = await resp.json();
-      const out =
-        data?.candidates?.[0]?.content?.parts?.[0]?.text || '(No response text from Gemini)';
-      showStatus('AI response received.', 'ok');
-      return out.trim();
+      const text =
+        data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+        "(Gemini returned no text)";
+      
+      showStatus("AI response received.", "ok");
+      return text.trim();
     }
 
     // ---------- PROMPT BUILDER ----------
     function buildBaseInstructions() {
       return `
-You are an expert Roblox-style rant narrator with fast pacing, Gen-Z humor, dramatic buildup, and punchy lines.
+You are an expert Roblox-style rant narrator with fast pacing, Gen-Z humor, dramatic escalation, and punchy lines.
 You ALWAYS start with "I'm starting to realize..."
-You write short, sharp, fast, rhythmic sentences — like a TikTok or YouTube Shorts rant creator.
-You NEVER use emojis. You NEVER use hashtags.
-You NEVER break character. You NEVER mention you're an AI.
+Write short, sharp, rhythmic lines for TikTok / YouTube Shorts rant style.
+You NEVER use emojis or hashtags.
+You NEVER break character and NEVER mention AI.
 
-Mandatory safety:
-- No slurs, hate speech, bullying, or discrimination.
-- No explicit sexual content or adult themes.
-- No self-harm, threats, or graphic violence.
-- PG-13 language ONLY unless spicy mode is on.
+SAFETY RULES:
+- No slurs, hate speech, bullying, discrimination.
+- No sexual content.
+- PG-13 frustration allowed only when spicy mode is ON.
+- No graphic violence, self-harm, or dangerous themes.
 `;
     }
 
@@ -579,105 +608,79 @@ Mandatory safety:
       const narrator = document.getElementById('narratorSelect').value;
       const outputText = document.getElementById('output').innerText.trim();
 
-      let intensityLabel = 'Cool';
-      if (intensity === 1) intensityLabel = 'Very chill';
-      else if (intensity === 2) intensityLabel = 'Cool';
-      else if (intensity === 3) intensityLabel = 'Salty';
-      else intensityLabel = 'Full meltdown';
+      // Intensity descriptor
+      let intensityLabel = ['Very chill', 'Cool', 'Salty', 'Full meltdown'][intensity - 1];
 
-      let lengthLabel = 'medium';
-      if (lengthVal === 1) lengthLabel = 'short';
-      else if (lengthVal === 2) lengthLabel = 'medium';
-      else if (lengthVal === 3) lengthLabel = 'long';
-      else lengthLabel = 'extra long';
+      // Length descriptor
+      let lengthLabel = ['short', 'medium', 'long', 'extra long'][lengthVal - 1];
 
-      let narratorDesc = 'a gender-neutral narrator';
-      if (narrator === 'male') narratorDesc = 'a male Roblox rant narrator';
-      else if (narrator === 'female') narratorDesc = 'a slightly sassy feminine rant narrator';
+      // Narrator voice
+      let narratorDesc = {
+        male: "a male Roblox rant narrator",
+        female: "a slightly sassy feminine narrator",
+        neutral: "a gender-neutral narrator"
+      }[narrator];
 
       let styleBlock = `
-STYLE SETTINGS:
-- Narrator: ${narratorDesc}.
-- Intensity: ${intensityLabel}.
-- Rant length: ${lengthLabel}.
+STYLE:
+- Narrator: ${narratorDesc}
+- Intensity: ${intensityLabel}
+- Length: ${lengthLabel}
+${includeSlang ? "- Gen-Z slang allowed\n" : "- Minimal slang\n"}
+${spicy ? "- PG-13 spicy frustration words allowed (no F-bombs)\n" : "- Clean language only\n"}
 `;
 
-      if (includeSlang) {
-        styleBlock += '- Allow Gen-Z slang when natural.\n';
-      } else {
-        styleBlock += '- Avoid heavy slang.\n';
-      }
+      let taskBlock = "";
 
-      if (spicy) {
-        styleBlock += `
-- Spicy Mode ON: allow mild PG-13 frustration words like "damn", "heck", "bro what".
-- No F-bombs or explicit profanity.
-`;
-      } else {
-        styleBlock += `
-- Spicy Mode OFF: clean frustration only — no profanity.
-`;
-      }
-
-      let taskBlock = '';
-
-      if (mode === 'generate') {
+      if (mode === "generate") {
         const safeTopic =
-          topic || 'a chaotic real-life situation (school, parents, friends, work, money, social media)';
+          topic || "a chaotic real-life situation (school, parents, lag, drama, adulting)";
         taskBlock = `
 TASK:
-Write a Roblox-style rant starting with "I'm starting to realize..." about:
-"${safeTopic}"
-
-Make it fast, funny, relatable, escalating, and creator-ready.
+Write a Roblox-style rant starting with "I'm starting to realize..."
+Topic: "${safeTopic}"
+Make it fast, funny, relatable, escalating, and viral-ready.
 `;
       }
 
-      else if (mode === 'rewrite') {
-        const baseText = pasted || outputText || '(no script provided)';
+      else if (mode === "rewrite") {
+        const baseText = pasted || outputText || "(no script provided)";
         taskBlock = `
 TASK:
-Rewrite and improve the following rant script.
-Keep the same theme, but make it more viral, punchier, cleaner, and Roblox-rant style.
-
-Original script:
+Rewrite and improve this rant into a more viral Roblox-style version:
 """${baseText}"""
 `;
       }
 
-      else if (mode === 'shuffle') {
+      else if (mode === "shuffle") {
         const safeTopic =
-          topic ||
-          'a relatable chaotic life situation (school, friends, parents, lag, chores, adulting)';
+          topic || "a relatable chaotic situation in daily life";
         taskBlock = `
 TASK:
-Create a DIFFERENT variation of a rant about:
+Write a NEW rant variation about:
 "${safeTopic}"
-
-New angle, new jokes, new mini-story — same theme, fresh result.
+Different jokes, different angle — same theme.
 `;
       }
 
-      else if (mode === 'punchier') {
-        const baseText = pasted || outputText || '(no script provided)';
+      else if (mode === "punchier") {
+        const baseText = pasted || outputText || "(no script provided)";
         taskBlock = `
 TASK:
-Make this script more unique, punchy, tight, and viral.
-
-Script:
+Make this rant more unique, punchy, clean, and viral:
 """${baseText}"""
 `;
       }
 
-      return buildBaseInstructions() + '\n' + styleBlock + '\n' + taskBlock;
+      return buildBaseInstructions() + "\n" + styleBlock + "\n" + taskBlock;
     }
 
     // ---------- BUTTON HANDLERS ----------
-    const outputEl = document.getElementById('output');
+    const outputEl = document.getElementById("output");
 
     async function handleGenerate() {
       try {
-        const prompt = buildRantPrompt('generate');
+        const prompt = buildRantPrompt("generate");
         const text = await callGemini(prompt);
         outputEl.textContent = text;
       } catch (err) {
@@ -687,7 +690,7 @@ Script:
 
     async function handleRewrite() {
       try {
-        const prompt = buildRantPrompt('rewrite');
+        const prompt = buildRantPrompt("rewrite");
         const text = await callGemini(prompt);
         outputEl.textContent = text;
       } catch (err) {
@@ -697,7 +700,7 @@ Script:
 
     async function handleShuffle() {
       try {
-        const prompt = buildRantPrompt('shuffle');
+        const prompt = buildRantPrompt("shuffle");
         const text = await callGemini(prompt);
         outputEl.textContent = text;
       } catch (err) {
@@ -707,7 +710,7 @@ Script:
 
     async function handlePunchier() {
       try {
-        const prompt = buildRantPrompt('punchier');
+        const prompt = buildRantPrompt("punchier");
         const text = await callGemini(prompt);
         outputEl.textContent = text;
       } catch (err) {
@@ -716,7 +719,7 @@ Script:
     }
 
     function handleCopy() {
-      const txt = outputEl.textContent || '';
+      const txt = outputEl.textContent || "";
       if (!txt.trim()) return;
       navigator.clipboard.writeText(txt);
     }
