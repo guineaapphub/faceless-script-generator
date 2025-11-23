@@ -10,15 +10,17 @@
 
   <style>
     :root {
-      --primary: #39ff14; /* neon green */
+      --primary: #39ff14;
       --primary-glow: rgba(57,255,20,0.5);
       --bg-light: #ffffff;
-      --bg-dark: #0d0d0d;
+      --bg-dark: #0b0d11;
       --text-light: #0d0d0d;
-      --text-dark: #ffffff;
+      --text-dark: #f5f5f5;
       --border: #2d2d2d;
       --card-light: #ffffff;
-      --card-dark: #111111;
+      --card-dark: #11151c;
+      --topbar-bg-light: #f7f7f7;
+      --topbar-bg-dark: #05060a;
     }
 
     body.light {
@@ -35,13 +37,112 @@
       font-family: "Rubik", sans-serif;
       margin: 0;
       padding: 0;
-      transition: 0.3s ease;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    /* Top bar */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--topbar-bg-light);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    body.dark .top-bar {
+      background: var(--topbar-bg-dark);
+    }
+
+    .top-brand {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .top-center {
+      display: flex;
+      justify-content: center;
+      flex: 1;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Theme toggle button (icon-only) */
+    .theme-toggle {
+      position: relative;
+      width: 46px;
+      height: 24px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #111;
+      display: inline-flex;
+      align-items: center;
+      padding: 2px;
+      cursor: pointer;
+      transition: background 0.25s ease, border-color 0.25s ease;
+    }
+    body.light .theme-toggle {
+      background: #f0f0f0;
+    }
+
+    .theme-toggle-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      transition: transform 0.25s ease, background 0.25s ease;
+      transform: translateX(0);
+    }
+    body.dark .theme-toggle-thumb {
+      transform: translateX(20px);
+      background: #000;
+      color: #ffd54f;
+    }
+    body.light .theme-toggle-thumb {
+      color: #ff9800;
+    }
+
+    /* Discord icon button */
+    .discord-icon-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      text-decoration: none;
+    }
+    .discord-icon-btn:hover {
+      background: rgba(88,101,242,0.12);
+      transform: translateY(-1px);
+      box-shadow: 0 0 6px rgba(88,101,242,0.5);
+    }
+
+    .discord-icon-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: #5865f2;
     }
 
     .container {
       max-width: 900px;
-      margin: 30px auto;
-      padding: 0 16px 40px;
+      margin: 24px auto 40px;
+      padding: 0 16px;
     }
 
     h1 {
@@ -50,6 +151,7 @@
       font-weight: 700;
       margin-bottom: 4px;
       text-shadow: 0 0 8px var(--primary-glow);
+      font-size: 32px;
     }
 
     .subtitle {
@@ -59,7 +161,6 @@
       margin-bottom: 22px;
     }
 
-    /* Ad placeholder */
     .ad-box {
       width: 100%;
       min-height: 90px;
@@ -80,7 +181,6 @@
       border: 1px solid var(--border);
       margin-bottom: 20px;
     }
-
     body.dark .panel {
       background: var(--card-dark);
     }
@@ -207,20 +307,7 @@
       min-height: 140px;
     }
 
-    .theme-switch {
-      margin-bottom: 14px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-    }
-
-    select#themeSelect {
-      width: 140px;
-    }
-
-    /* API accordion */
+    /* API section */
     .api-header {
       display: flex;
       justify-content: space-between;
@@ -229,7 +316,6 @@
       font-weight: 600;
       font-size: 14px;
     }
-
     .api-header span:last-child {
       font-size: 18px;
     }
@@ -238,7 +324,6 @@
       margin-top: 10px;
       display: none;
     }
-
     .api-body.open {
       display: block;
     }
@@ -262,10 +347,22 @@
       line-height: 1;
     }
 
+    .api-status {
+      font-size: 12px;
+      margin-top: 6px;
+      min-height: 16px;
+    }
+    .api-status.ok {
+      color: #2e7d32;
+    }
+    .api-status.err {
+      color: #c62828;
+    }
+
     .api-help {
       font-size: 12px;
       margin-top: 6px;
-      opacity: 0.85;
+      opacity: 0.9;
     }
 
     .api-help a {
@@ -274,50 +371,51 @@
       text-decoration: none;
     }
 
-    .api-status {
+    .api-help a:hover {
+      text-decoration: underline;
+    }
+
+    .groq-link-btn {
+      margin-top: 8px;
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
       font-size: 12px;
-      margin-top: 6px;
-      min-height: 16px;
+      text-decoration: none;
+      color: inherit;
+      transition: 0.2s;
+    }
+    .groq-link-btn:hover {
+      border-color: var(--primary);
+      box-shadow: 0 0 6px var(--primary-glow);
+      transform: translateY(-1px);
     }
 
-    .api-status.ok {
-      color: #2e7d32;
-    }
-
-    .api-status.err {
-      color: #c62828;
-    }
-
-    .api-provider-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .api-provider-row select {
-      flex: 1 1 220px;
-      margin-bottom: 0;
-    }
-
-    .api-guide {
-      margin-top: 14px;
-      border-top: 1px solid var(--border);
-      padding-top: 10px;
+    /* Footer */
+    .footer-note {
       font-size: 12px;
+      text-align: center;
+      opacity: 0.8;
+      margin-top: 18px;
     }
-
-    .api-guide h4 {
-      margin: 6px 0;
-      font-size: 12px;
+    .footer-note a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
     }
-
-    .api-guide p {
-      margin: 3px 0;
+    .footer-note a:hover {
+      text-decoration: underline;
     }
 
     @media (max-width: 600px) {
+      .top-bar {
+        padding: 8px 10px;
+      }
+      .top-center {
+        justify-content: flex-start;
+        margin-left: 8px;
+      }
       .button-row {
         flex-direction: column;
       }
@@ -326,17 +424,32 @@
 </head>
 
 <body class="light">
-  <div class="container">
-
-    <div class="theme-switch">
-      <span>Theme:</span>
-      <select id="themeSelect">
-        <option value="auto" selected>Auto</option>
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
-      </select>
+  <!-- Slim header bar -->
+  <div class="top-bar">
+    <div class="top-brand">Faceless Script Generator</div>
+    <div class="top-center">
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle light/dark mode">
+        <div class="theme-toggle-thumb">☀️</div>
+      </button>
     </div>
+    <div class="top-right">
+      <a
+        href="https://discord.gg/Y4GenJXgEn"
+        class="discord-icon-btn"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="Join our Discord community"
+      >
+        <!-- Discord SVG icon -->
+        <svg viewBox="0 0 245 240" aria-hidden="true">
+          <path d="M104.4 104.9c-5.7 0-10.2 5-10.2 11.1s4.6 11.1 10.2 11.1c5.7 0 10.2-5 10.2-11.1.1-6.1-4.5-11.1-10.2-11.1zm36.2 0c-5.7 0-10.2 5-10.2 11.1s4.6 11.1 10.2 11.1c5.7 0 10.2-5 10.2-11.1s-4.5-11.1-10.2-11.1z"/>
+          <path d="M189.5 20h-134C42.2 20 32 30.2 32 42.7v134.6c0 12.5 10.2 22.7 23.5 22.7h113.3l-5.3-18.5 12.8 11.9 12.1 11.3 21.5 19V42.7C209.8 30.2 199.6 20 186.3 20h3.2zm-39.2 135.2s-3.7-4.4-6.8-8.3c13.5-3.8 18.6-12.2 18.6-12.2-4.2 2.7-8.2 4.6-11.8 5.9-5.1 2.1-9.9 3.4-14.6 4.2-9.6 1.8-18.4 1.3-25.9-.1-5.7-1.1-10.6-2.6-14.7-4.2-2.3-.9-4.8-2-7.3-3.4-.3-.2-.6-.3-.9-.5-.2-.1-.3-.2-.4-.3-1.8-1-2.8-1.7-2.8-1.7s4.9 8.2 17.9 12.1c-3.1 3.9-6.9 8.5-6.9 8.5-22.8-.7-31.5-15.7-31.5-15.7 0-33.3 14.9-60.3 14.9-60.3 14.9-11.2 29.1-10.9 29.1-10.9l1 1.2c-18.7 5.4-27.3 13.7-27.3 13.7s2.3-1.3 6.1-3.1c11.1-4.9 19.9-6.2 23.5-6.5.6-.1 1.1-.2 1.7-.2 6.1-.8 13-1 20.2-.2 9.5 1.1 19.7 3.9 30.1 9.6 0 0-8.2-7.8-25.9-13.2l1.4-1.6s14.2-.3 29.1 10.9c0 0 14.9 27 14.9 60.3 0 0-8.8 15-31.6 15.7z"/>
+        </svg>
+      </a>
+    </div>
+  </div>
 
+  <div class="container">
     <h1>Roblox Rant Generator</h1>
     <div class="subtitle">Type your theme, build your rant, bye-bye noob.</div>
 
@@ -389,40 +502,36 @@
     <!-- AD PLACEMENT MIDDLE -->
     <div class="ad-box">Ad Placeholder — Mid Content</div>
 
-    <!-- AI PROVIDER & API SETTINGS -->
+    <!-- GROQ API SETTINGS -->
     <div class="panel">
       <div id="apiHeader" class="api-header">
-        <span>AI Provider &amp; API Settings</span>
+        <span>Groq API Settings</span>
         <span id="apiChevron">▼</span>
       </div>
 
       <div id="apiBody" class="api-body">
-        <div class="api-provider-row">
-          <label for="providerSelect" style="margin-bottom:0;">AI Provider</label>
-          <select id="providerSelect">
-            <option value="gemini" selected>Google Gemini (Default)</option>
-            <option value="groq">Groq (FREE — Llama 3.1)</option>
-          </select>
-        </div>
-
         <div class="api-row">
-          <input id="apiKeyInput" type="password" placeholder="Enter your API key for the selected provider" />
+          <input id="apiKeyInput" type="password" placeholder="Enter your Groq API key" />
           <button id="toggleKeyBtn" class="btn-secondary api-eye-btn" type="button">👁</button>
-          <button id="saveKeyBtn" class="btn-secondary" style="flex:0 0 auto;">Save Key</button>
-          <button id="clearKeyBtn" class="btn-secondary" style="flex:0 0 auto;">Clear</button>
+          <button id="saveKeyBtn" class="btn-secondary" type="button">Save Key</button>
+          <button id="clearKeyBtn" class="btn-secondary" type="button">Clear</button>
         </div>
 
-        <div id="apiStatus" class="api-status"></div>
+        <div id="apiStatus" class="api-status">No API key stored yet.</div>
 
         <div class="api-help">
-          Your API key is stored securely in your browser's local storage only.
+          Your Groq API key is stored securely in your browser's local storage only.<br/>
+          Model used: <strong>Llama 3.1 70B (via Groq)</strong>.
         </div>
 
-        <div class="api-guide">
-          <h4>How to get your API keys</h4>
-          <p><strong>Google Gemini:</strong> Google AI Studio → API Keys → Create Key (no OAuth needed)</p>
-          <p><strong>Groq:</strong> groq.com → API Keys → Create Key</p>
-        </div>
+        <a
+          class="groq-link-btn"
+          href="https://console.groq.com/keys"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          👉 Get your Groq API key here →
+        </a>
       </div>
     </div>
 
@@ -435,162 +544,132 @@
     <!-- AD PLACEMENT BOTTOM -->
     <div class="ad-box">Ad Placeholder — Footer Banner</div>
 
-    <!-- FOOTER WITH DISCORD BUTTON + TEXT -->
-    <div style="text-align:center; margin-top:20px;">
-      <a
-        href="https://discord.gg/Y4GenJXgEn"
-        target="_blank"
-        rel="noopener noreferrer"
-        style="
-          display:inline-block;
-          padding:10px 16px;
-          background:var(--primary);
-          color:#000;
-          border-radius:8px;
-          font-weight:700;
-          text-decoration:none;
-          box-shadow:0 0 6px var(--primary-glow);
-          transition:0.2s;
-        "
-        onmouseover="this.style.opacity='0.85'"
-        onmouseout="this.style.opacity='1'"
-      >
-        Join our Discord community →
-      </a>
-      <div style="font-size:12px; margin-top:6px; opacity:0.85;">
-        Need help? Join our FREE Discord for support, updates, and to communicate with other creators.
-      </div>
+    <!-- Footer note -->
+    <div class="footer-note">
+      Need help? <a href="https://discord.gg/Y4GenJXgEn" target="_blank" rel="noopener noreferrer">Join our FREE Discord</a> for support, updates, and to communicate with other creators.
     </div>
-
-  </div> <!-- END CONTAINER -->
+  </div>
 
   <!-- JAVASCRIPT -->
   <script>
     // ---------- THEME HANDLING ----------
-    const themeSelect = document.getElementById('themeSelect');
-    const savedTheme = localStorage.getItem('fsg-theme') || 'auto';
+    const themeToggle = document.getElementById("themeToggle");
+    const themeThumb = document.querySelector(".theme-toggle-thumb");
 
-    function applyTheme(mode) {
-      document.body.classList.remove('light', 'dark');
-      if (mode === 'auto') {
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.body.classList.add(prefersDark ? 'dark' : 'light');
-      } else {
-        document.body.classList.add(mode);
-      }
+    function systemPrefersDark() {
+      return window.matchMedia &&
+             window.matchMedia("(prefers-color-scheme: dark)").matches;
     }
 
-    themeSelect.value = savedTheme;
-    applyTheme(savedTheme);
+    function applyTheme(mode) {
+      document.body.classList.remove("light", "dark");
+      document.body.classList.add(mode === "dark" ? "dark" : "light");
+      themeThumb.textContent = mode === "dark" ? "🌙" : "☀️";
+      localStorage.setItem("fsg-theme", mode);
+    }
 
-    themeSelect.addEventListener('change', () => {
-      const val = themeSelect.value;
-      localStorage.setItem('fsg-theme', val);
-      applyTheme(val);
+    const savedTheme = localStorage.getItem("fsg-theme");
+    if (savedTheme === "light" || savedTheme === "dark") {
+      applyTheme(savedTheme);
+    } else {
+      applyTheme(systemPrefersDark() ? "dark" : "light");
+    }
+
+    themeToggle.addEventListener("click", () => {
+      const current = document.body.classList.contains("dark") ? "dark" : "light";
+      applyTheme(current === "dark" ? "light" : "dark");
     });
 
     // ---------- SLIDER LABELS ----------
-    const intensitySlider = document.getElementById('intensitySlider');
-    const lengthSlider = document.getElementById('lengthSlider');
-    const intensityLabel = document.getElementById('intensityLabel');
-    const lengthLabel = document.getElementById('lengthLabel');
+    const intensitySlider = document.getElementById("intensitySlider");
+    const lengthSlider = document.getElementById("lengthSlider");
+    const intensityLabel = document.getElementById("intensityLabel");
+    const lengthLabel = document.getElementById("lengthLabel");
 
     function updateIntensityLabel() {
       const v = Number(intensitySlider.value);
-      if (v === 1) intensityLabel.textContent = 'Very chill';
-      else if (v === 2) intensityLabel.textContent = 'Cool';
-      else if (v === 3) intensityLabel.textContent = 'Salty';
-      else intensityLabel.textContent = 'Full meltdown';
+      if (v === 1) intensityLabel.textContent = "Very chill";
+      else if (v === 2) intensityLabel.textContent = "Cool";
+      else if (v === 3) intensityLabel.textContent = "Salty";
+      else intensityLabel.textContent = "Full meltdown";
     }
 
     function updateLengthLabel() {
       const v = Number(lengthSlider.value);
-      if (v === 1) lengthLabel.textContent = 'Short rant';
-      else if (v === 2) lengthLabel.textContent = 'Medium rant';
-      else if (v === 3) lengthLabel.textContent = 'Long rant';
-      else lengthLabel.textContent = 'Max rant';
+      if (v === 1) lengthLabel.textContent = "Short rant";
+      else if (v === 2) lengthLabel.textContent = "Medium rant";
+      else if (v === 3) lengthLabel.textContent = "Long rant";
+      else lengthLabel.textContent = "Max rant";
     }
 
-    intensitySlider.addEventListener('input', updateIntensityLabel);
-    lengthSlider.addEventListener('input', updateLengthLabel);
+    intensitySlider.addEventListener("input", updateIntensityLabel);
+    lengthSlider.addEventListener("input", updateLengthLabel);
     updateIntensityLabel();
     updateLengthLabel();
 
     // ---------- COLLAPSIBLE API PANEL ----------
-    const apiHeader = document.getElementById('apiHeader');
-    const apiBody = document.getElementById('apiBody');
-    const apiChevron = document.getElementById('apiChevron');
+    const apiHeader = document.getElementById("apiHeader");
+    const apiBody = document.getElementById("apiBody");
+    const apiChevron = document.getElementById("apiChevron");
 
-    apiHeader.addEventListener('click', () => {
-      const open = apiBody.classList.toggle('open');
-      apiChevron.textContent = open ? '▲' : '▼';
+    apiHeader.addEventListener("click", () => {
+      const open = apiBody.classList.toggle("open");
+      apiChevron.textContent = open ? "▲" : "▼";
     });
 
-    // ---------- AI PROVIDER & API KEY HANDLING ----------
-    const providerSelect = document.getElementById('providerSelect');
-    const apiKeyInput = document.getElementById('apiKeyInput');
-    const apiStatus = document.getElementById('apiStatus');
-    const saveKeyBtn = document.getElementById('saveKeyBtn');
-    const clearKeyBtn = document.getElementById('clearKeyBtn');
-    const toggleKeyBtn = document.getElementById('toggleKeyBtn');
-
-    function providerStorageKey() {
-      return 'fsg-key-' + providerSelect.value;
-    }
+    // ---------- GROQ API KEY STORAGE ----------
+    const apiKeyInput = document.getElementById("apiKeyInput");
+    const apiStatus = document.getElementById("apiStatus");
+    const saveKeyBtn = document.getElementById("saveKeyBtn");
+    const clearKeyBtn = document.getElementById("clearKeyBtn");
+    const toggleKeyBtn = document.getElementById("toggleKeyBtn");
 
     function getApiKey() {
-      return localStorage.getItem(providerStorageKey()) || '';
+      return localStorage.getItem("fsg-groq-key") || "";
     }
 
     function showStatus(msg, type) {
       apiStatus.textContent = msg;
-      apiStatus.className = 'api-status ' + (type || '');
+      apiStatus.className = "api-status" + (type ? " " + type : "");
     }
 
-    function loadProviderKey() {
-      const key = getApiKey();
-      apiKeyInput.value = key;
-      if (key) {
-        showStatus('API key loaded from your browser for this provider.', 'ok');
-      } else {
-        showStatus('No API key stored for this provider yet.', 'err');
-      }
+    // Load key on start
+    const storedKey = getApiKey();
+    if (storedKey) {
+      apiKeyInput.value = storedKey;
+      showStatus("Groq API key loaded from your browser.", "ok");
+      apiBody.classList.add("open");
+      apiChevron.textContent = "▲";
     }
 
-    providerSelect.addEventListener('change', () => {
-      loadProviderKey();
-    });
-
-    saveKeyBtn.addEventListener('click', () => {
+    saveKeyBtn.addEventListener("click", () => {
       const key = apiKeyInput.value.trim();
       if (!key) {
-        showStatus('Please enter a valid API key.', 'err');
+        showStatus("Please enter a valid Groq API key.", "err");
         return;
       }
-      localStorage.setItem(providerStorageKey(), key);
-      showStatus('API key saved for this provider.', 'ok');
+      localStorage.setItem("fsg-groq-key", key);
+      showStatus("Groq API key saved.", "ok");
     });
 
-    clearKeyBtn.addEventListener('click', () => {
-      localStorage.removeItem(providerStorageKey());
-      apiKeyInput.value = '';
-      showStatus('API key cleared for this provider.', 'err');
+    clearKeyBtn.addEventListener("click", () => {
+      localStorage.removeItem("fsg-groq-key");
+      apiKeyInput.value = "";
+      showStatus("Groq API key cleared.", "err");
     });
 
-    toggleKeyBtn.addEventListener('click', () => {
-      if (apiKeyInput.type === 'password') {
-        apiKeyInput.type = 'text';
-        toggleKeyBtn.textContent = '🙈';
+    // Eye toggle
+    toggleKeyBtn.addEventListener("click", () => {
+      if (apiKeyInput.type === "password") {
+        apiKeyInput.type = "text";
+        toggleKeyBtn.textContent = "🙈";
       } else {
-        apiKeyInput.type = 'password';
-        toggleKeyBtn.textContent = '👁';
+        apiKeyInput.type = "password";
+        toggleKeyBtn.textContent = "👁";
       }
     });
 
-    // Load initial provider key (Gemini by default)
-    loadProviderKey();
-
-    // ---------- PROMPT BUILDERS ----------
+    // ---------- PROMPT BUILDER ----------
     function buildBaseInstructions() {
       return `
 You are an expert Roblox-style rant narrator with fast pacing, Gen-Z humor, dramatic buildup, and punchy lines.
@@ -608,42 +687,42 @@ Mandatory safety:
     }
 
     function buildRantPrompt(mode) {
-      const topic = document.getElementById('topicInput').value.trim();
-      const pasted = document.getElementById('pasteInput').value.trim();
+      const topic = document.getElementById("topicInput").value.trim();
+      const pasted = document.getElementById("pasteInput").value.trim();
       const intensity = Number(intensitySlider.value);
       const lengthVal = Number(lengthSlider.value);
-      const includeSlang = document.getElementById('includeSlang').checked;
-      const spicy = document.getElementById('spicyMode').checked;
-      const narrator = document.getElementById('narratorSelect').value;
-      const outputText = document.getElementById('output').innerText.trim();
+      const includeSlang = document.getElementById("includeSlang").checked;
+      const spicy = document.getElementById("spicyMode").checked;
+      const narrator = document.getElementById("narratorSelect").value;
+      const outputText = document.getElementById("output").innerText.trim();
 
-      let intensityLabel = 'Cool';
-      if (intensity === 1) intensityLabel = 'Very chill';
-      else if (intensity === 2) intensityLabel = 'Cool';
-      else if (intensity === 3) intensityLabel = 'Salty';
-      else intensityLabel = 'Full meltdown';
+      let intensityLabelText = "Cool";
+      if (intensity === 1) intensityLabelText = "Very chill";
+      else if (intensity === 2) intensityLabelText = "Cool";
+      else if (intensity === 3) intensityLabelText = "Salty";
+      else intensityLabelText = "Full meltdown";
 
-      let lengthLabel = 'medium';
-      if (lengthVal === 1) lengthLabel = 'short';
-      else if (lengthVal === 2) lengthLabel = 'medium';
-      else if (lengthVal === 3) lengthLabel = 'long';
-      else lengthLabel = 'extra long';
+      let lengthLabelText = "medium";
+      if (lengthVal === 1) lengthLabelText = "short";
+      else if (lengthVal === 2) lengthLabelText = "medium";
+      else if (lengthVal === 3) lengthLabelText = "long";
+      else lengthLabelText = "extra long";
 
-      let narratorDesc = 'a gender-neutral narrator';
-      if (narrator === 'male') narratorDesc = 'a male Roblox rant narrator';
-      else if (narrator === 'female') narratorDesc = 'a slightly sassy feminine rant narrator';
+      let narratorDesc = "a gender-neutral narrator";
+      if (narrator === "male") narratorDesc = "a male Roblox rant narrator";
+      else if (narrator === "female") narratorDesc = "a slightly sassy feminine rant narrator";
 
       let styleBlock = `
 STYLE SETTINGS:
 - Narrator: ${narratorDesc}.
-- Intensity: ${intensityLabel}.
-- Rant length: ${lengthLabel}.
+- Intensity: ${intensityLabelText}.
+- Rant length: ${lengthLabelText}.
 `;
 
       if (includeSlang) {
-        styleBlock += '- Allow Gen-Z slang when natural.\n';
+        styleBlock += "- Allow Gen-Z slang when natural.\n";
       } else {
-        styleBlock += '- Avoid heavy slang.\n';
+        styleBlock += "- Avoid heavy slang.\n";
       }
 
       if (spicy) {
@@ -657,11 +736,11 @@ STYLE SETTINGS:
 `;
       }
 
-      let taskBlock = '';
+      let taskBlock = "";
 
-      if (mode === 'generate') {
+      if (mode === "generate") {
         const safeTopic =
-          topic || 'a chaotic real-life situation (school, parents, friends, work, money, social media)';
+          topic || "a chaotic real-life situation (school, parents, friends, work, money, social media)";
         taskBlock = `
 TASK:
 Write a Roblox-style rant starting with "I'm starting to realize..." about:
@@ -669,8 +748,8 @@ Write a Roblox-style rant starting with "I'm starting to realize..." about:
 
 Make it fast, funny, relatable, escalating, and creator-ready.
 `;
-      } else if (mode === 'rewrite') {
-        const baseText = pasted || outputText || '(no script provided)';
+      } else if (mode === "rewrite") {
+        const baseText = pasted || outputText || "(no script provided)";
         taskBlock = `
 TASK:
 Rewrite and improve the following rant script.
@@ -679,10 +758,10 @@ Keep the same theme, but make it more viral, punchier, cleaner, and Roblox-rant 
 Original script:
 """${baseText}"""
 `;
-      } else if (mode === 'shuffle') {
+      } else if (mode === "shuffle") {
         const safeTopic =
           topic ||
-          'a relatable chaotic life situation (school, friends, parents, lag, chores, adulting)';
+          "a relatable chaotic life situation (school, friends, parents, lag, chores, adulting)";
         taskBlock = `
 TASK:
 Create a DIFFERENT variation of a rant about:
@@ -690,8 +769,8 @@ Create a DIFFERENT variation of a rant about:
 
 New angle, new jokes, new mini-story — same theme, fresh result.
 `;
-      } else if (mode === 'punchier') {
-        const baseText = pasted || outputText || '(no script provided)';
+      } else if (mode === "punchier") {
+        const baseText = pasted || outputText || "(no script provided)";
         taskBlock = `
 TASK:
 Make this script more unique, punchy, tight, and viral.
@@ -701,120 +780,69 @@ Script:
 `;
       }
 
-      return buildBaseInstructions() + '\n' + styleBlock + '\n' + taskBlock;
+      return buildBaseInstructions() + "\n" + styleBlock + "\n" + taskBlock;
     }
 
-    // ---------- GEMINI CALL ----------
-    async function callGemini(promptText) {
-      const key = getApiKey();
-      if (!key) {
-        showStatus('Add your Gemini API key.', 'err');
-        throw new Error('Missing Gemini API key');
-      }
-
-      showStatus('Talking to Gemini…', '');
-
-      const body = {
-        contents: [{
-          parts: [{ text: promptText }]
-        }]
-      };
-
-      const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='
-        + encodeURIComponent(key);
-
-      const resp = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      });
-
-      if (!resp.ok) {
-        const text = await resp.text();
-        console.error('Gemini error', resp.status, text);
-        showStatus('Gemini error: ' + resp.status, 'err');
-        throw new Error('Gemini error');
-      }
-
-      const data = await resp.json();
-      const out = data?.candidates?.[0]?.content?.parts?.[0]?.text || '(No response text from Gemini)';
-      showStatus('AI response received.', 'ok');
-      return out.trim();
-    }
-
-    // ---------- GROQ CALL (FREE) ----------
+    // ---------- GROQ CALL ----------
     async function callGroq(promptText) {
       const key = getApiKey();
       if (!key) {
-        showStatus('Add your Groq API key.', 'err');
-        throw new Error('Missing Groq API key');
+        showStatus("Add your Groq API key to generate rants.", "err");
+        throw new Error("Missing Groq API key");
       }
 
-      showStatus('Talking to Groq…', '');
+      showStatus("Talking to Groq…", "");
 
-      const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
+      const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + key
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + key
         },
         body: JSON.stringify({
-          model: 'llama3-8b-8192',
+          model: "llama-3.1-70b-versatile",
           messages: [
-            { role: 'system', content: 'You are a Roblox rant narrator.' },
-            { role: 'user', content: promptText }
+            { role: "system", content: "You are a Roblox rant narrator that follows the user's instructions." },
+            { role: "user", content: promptText }
           ],
-          temperature: 0.8,
-          max_tokens: 800
+          temperature: 0.9,
+          max_tokens: 900
         })
       });
 
       if (!resp.ok) {
         const text = await resp.text();
-        console.error('Groq error', resp.status, text);
-        showStatus('Groq error: ' + resp.status, 'err');
-        throw new Error('Groq error');
+        console.error("Groq error", resp.status, text);
+        showStatus("Groq error: " + resp.status, "err");
+        throw new Error("Groq error");
       }
 
       const data = await resp.json();
-      const out = data?.choices?.[0]?.message?.content || '(No response text from Groq)';
-      showStatus('AI response received.', 'ok');
+      const out = data?.choices?.[0]?.message?.content || "(No output)";
+      showStatus("AI response received.", "ok");
       return out.trim();
     }
 
-    // ---------- MAIN AI ROUTER ----------
-    async function callAI(mode) {
-      const provider = providerSelect.value;
-      const prompt = buildRantPrompt(mode);
-
-      if (provider === 'gemini') {
-        return callGemini(prompt);
-      } else if (provider === 'groq') {
-        return callGroq(prompt);
-      } else {
-        throw new Error('Unsupported provider: ' + provider);
-      }
-    }
-
-    // ---------- BUTTON HANDLERS ----------
-    const outputEl = document.getElementById('output');
+    // ---------- MAIN RUNNER ----------
+    const outputEl = document.getElementById("output");
 
     async function run(mode) {
       try {
-        const text = await callAI(mode);
+        const prompt = buildRantPrompt(mode);
+        const text = await callGroq(prompt);
         outputEl.textContent = text;
       } catch (err) {
         console.error(err);
       }
     }
 
-    document.getElementById('generateBtn').addEventListener('click', () => run('generate'));
-    document.getElementById('rewriteBtn').addEventListener('click', () => run('rewrite'));
-    document.getElementById('shuffleBtn').addEventListener('click', () => run('shuffle'));
-    document.getElementById('punchierBtn').addEventListener('click', () => run('punchier'));
+    document.getElementById("generateBtn").addEventListener("click", () => run("generate"));
+    document.getElementById("rewriteBtn").addEventListener("click", () => run("rewrite"));
+    document.getElementById("shuffleBtn").addEventListener("click", () => run("shuffle"));
+    document.getElementById("punchierBtn").addEventListener("click", () => run("punchier"));
 
-    document.getElementById('copyBtn').addEventListener('click', () => {
-      const txt = outputEl.textContent || '';
+    document.getElementById("copyBtn").addEventListener("click", () => {
+      const txt = outputEl.textContent || "";
       if (!txt.trim()) return;
       navigator.clipboard.writeText(txt);
     });
