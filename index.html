@@ -119,6 +119,7 @@
       border-color: var(--primary);
       box-shadow: 0 0 8px var(--primary-glow);
     }
+
     .row {
       display: flex;
       flex-wrap: wrap;
@@ -401,8 +402,6 @@
           <select id="providerSelect">
             <option value="gemini" selected>Google Gemini (Default)</option>
             <option value="groq">Groq (FREE — Llama 3.1)</option>
-            <option value="openrouter">OpenRouter</option>
-            <option value="together">TogetherAI</option>
           </select>
         </div>
 
@@ -423,11 +422,10 @@
           <h4>How to get your API keys</h4>
           <p><strong>Google Gemini:</strong> Google AI Studio → API Keys → Create Key (no OAuth needed)</p>
           <p><strong>Groq:</strong> groq.com → API Keys → Create Key</p>
-          <p><strong>OpenRouter:</strong> openrouter.ai → Account → API Keys</p>
-          <p><strong>TogetherAI:</strong> api.together.xyz → Account → API Keys</p>
         </div>
       </div>
     </div>
+
     <!-- OUTPUT -->
     <div class="panel">
       <label>Generated Rant Script</label>
@@ -525,44 +523,262 @@
 
     apiHeader.addEventListener('click', () => {
       const open = apiBody.classList.toggle('open');
-      apiChevron.textContent
-    // ---------- FALLBACK: GROQ (FREE) ----------
-    // We only call Groq if provider === "groq"
+      apiChevron.textContent = open ? '▲' : '▼';
+    });
+
+    // ---------- AI PROVIDER & API KEY HANDLING ----------
+    const providerSelect = document.getElementById('providerSelect');
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    const apiStatus = document.getElementById('apiStatus');
+    const saveKeyBtn = document.getElementById('saveKeyBtn');
+    const clearKeyBtn = document.getElementById('clearKeyBtn');
+    const toggleKeyBtn = document.getElementById('toggleKeyBtn');
+
+    function providerStorageKey() {
+      return 'fsg-key-' + providerSelect.value;
+    }
+
+    function getApiKey() {
+      return localStorage.getItem(providerStorageKey()) || '';
+    }
+
+    function showStatus(msg, type) {
+      apiStatus.textContent = msg;
+      apiStatus.className = 'api-status ' + (type || '');
+    }
+
+    function loadProviderKey() {
+      const key = getApiKey();
+      apiKeyInput.value = key;
+      if (key) {
+        showStatus('API key loaded from your browser for this provider.', 'ok');
+      } else {
+        showStatus('No API key stored for this provider yet.', 'err');
+      }
+    }
+
+    providerSelect.addEventListener('change', () => {
+      loadProviderKey();
+    });
+
+    saveKeyBtn.addEventListener('click', () => {
+      const key = apiKeyInput.value.trim();
+      if (!key) {
+        showStatus('Please enter a valid API key.', 'err');
+        return;
+      }
+      localStorage.setItem(providerStorageKey(), key);
+      showStatus('API key saved for this provider.', 'ok');
+    });
+
+    clearKeyBtn.addEventListener('click', () => {
+      localStorage.removeItem(providerStorageKey());
+      apiKeyInput.value = '';
+      showStatus('API key cleared for this provider.', 'err');
+    });
+
+    toggleKeyBtn.addEventListener('click', () => {
+      if (apiKeyInput.type === 'password') {
+        apiKeyInput.type = 'text';
+        toggleKeyBtn.textContent = '🙈';
+      } else {
+        apiKeyInput.type = 'password';
+        toggleKeyBtn.textContent = '👁';
+      }
+    });
+
+    // Load initial provider key (Gemini by default)
+    loadProviderKey();
+
+    // ---------- PROMPT BUILDERS ----------
+    function buildBaseInstructions() {
+      return `
+You are an expert Roblox-style rant narrator with fast pacing, Gen-Z humor, dramatic buildup, and punchy lines.
+You ALWAYS start with "I'm starting to realize..."
+You write short, sharp, fast, rhythmic sentences — like a TikTok or YouTube Shorts rant creator.
+You NEVER use emojis. You NEVER use hashtags.
+You NEVER break character. You NEVER mention you're an AI.
+
+Mandatory safety:
+- No slurs, hate speech, bullying, or discrimination.
+- No explicit sexual content or adult themes.
+- No self-harm, threats, or graphic violence.
+- PG-13 language ONLY unless spicy mode is on.
+`;
+    }
+
+    function buildRantPrompt(mode) {
+      const topic = document.getElementById('topicInput').value.trim();
+      const pasted = document.getElementById('pasteInput').value.trim();
+      const intensity = Number(intensitySlider.value);
+      const lengthVal = Number(lengthSlider.value);
+      const includeSlang = document.getElementById('includeSlang').checked;
+      const spicy = document.getElementById('spicyMode').checked;
+      const narrator = document.getElementById('narratorSelect').value;
+      const outputText = document.getElementById('output').innerText.trim();
+
+      let intensityLabel = 'Cool';
+      if (intensity === 1) intensityLabel = 'Very chill';
+      else if (intensity === 2) intensityLabel = 'Cool';
+      else if (intensity === 3) intensityLabel = 'Salty';
+      else intensityLabel = 'Full meltdown';
+
+      let lengthLabel = 'medium';
+      if (lengthVal === 1) lengthLabel = 'short';
+      else if (lengthVal === 2) lengthLabel = 'medium';
+      else if (lengthVal === 3) lengthLabel = 'long';
+      else lengthLabel = 'extra long';
+
+      let narratorDesc = 'a gender-neutral narrator';
+      if (narrator === 'male') narratorDesc = 'a male Roblox rant narrator';
+      else if (narrator === 'female') narratorDesc = 'a slightly sassy feminine rant narrator';
+
+      let styleBlock = `
+STYLE SETTINGS:
+- Narrator: ${narratorDesc}.
+- Intensity: ${intensityLabel}.
+- Rant length: ${lengthLabel}.
+`;
+
+      if (includeSlang) {
+        styleBlock += '- Allow Gen-Z slang when natural.\n';
+      } else {
+        styleBlock += '- Avoid heavy slang.\n';
+      }
+
+      if (spicy) {
+        styleBlock += `
+- Spicy Mode ON: allow mild PG-13 frustration words like "damn", "heck", "bro what".
+- No F-bombs or explicit profanity.
+`;
+      } else {
+        styleBlock += `
+- Spicy Mode OFF: clean frustration only — no profanity.
+`;
+      }
+
+      let taskBlock = '';
+
+      if (mode === 'generate') {
+        const safeTopic =
+          topic || 'a chaotic real-life situation (school, parents, friends, work, money, social media)';
+        taskBlock = `
+TASK:
+Write a Roblox-style rant starting with "I'm starting to realize..." about:
+"${safeTopic}"
+
+Make it fast, funny, relatable, escalating, and creator-ready.
+`;
+      } else if (mode === 'rewrite') {
+        const baseText = pasted || outputText || '(no script provided)';
+        taskBlock = `
+TASK:
+Rewrite and improve the following rant script.
+Keep the same theme, but make it more viral, punchier, cleaner, and Roblox-rant style.
+
+Original script:
+"""${baseText}"""
+`;
+      } else if (mode === 'shuffle') {
+        const safeTopic =
+          topic ||
+          'a relatable chaotic life situation (school, friends, parents, lag, chores, adulting)';
+        taskBlock = `
+TASK:
+Create a DIFFERENT variation of a rant about:
+"${safeTopic}"
+
+New angle, new jokes, new mini-story — same theme, fresh result.
+`;
+      } else if (mode === 'punchier') {
+        const baseText = pasted || outputText || '(no script provided)';
+        taskBlock = `
+TASK:
+Make this script more unique, punchy, tight, and viral.
+
+Script:
+"""${baseText}"""
+`;
+      }
+
+      return buildBaseInstructions() + '\n' + styleBlock + '\n' + taskBlock;
+    }
+
+    // ---------- GEMINI CALL ----------
+    async function callGemini(promptText) {
+      const key = getApiKey();
+      if (!key) {
+        showStatus('Add your Gemini API key.', 'err');
+        throw new Error('Missing Gemini API key');
+      }
+
+      showStatus('Talking to Gemini…', '');
+
+      const body = {
+        contents: [{
+          parts: [{ text: promptText }]
+        }]
+      };
+
+      const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='
+        + encodeURIComponent(key);
+
+      const resp = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      if (!resp.ok) {
+        const text = await resp.text();
+        console.error('Gemini error', resp.status, text);
+        showStatus('Gemini error: ' + resp.status, 'err');
+        throw new Error('Gemini error');
+      }
+
+      const data = await resp.json();
+      const out = data?.candidates?.[0]?.content?.parts?.[0]?.text || '(No response text from Gemini)';
+      showStatus('AI response received.', 'ok');
+      return out.trim();
+    }
+
+    // ---------- GROQ CALL (FREE) ----------
     async function callGroq(promptText) {
       const key = getApiKey();
       if (!key) {
-        showStatus("Add your Groq API key.", "err");
-        throw new Error("Missing Groq API key");
+        showStatus('Add your Groq API key.', 'err');
+        throw new Error('Missing Groq API key');
       }
 
-      showStatus("Talking to Groq…", "");
+      showStatus('Talking to Groq…', '');
 
-      const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
+      const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + key
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + key
         },
         body: JSON.stringify({
-          model: "llama3-8b-8192",
+          model: 'llama3-8b-8192',
           messages: [
-            { role: "system", content: "You are a Roblox rant narrator." },
-            { role: "user", content: promptText }
+            { role: 'system', content: 'You are a Roblox rant narrator.' },
+            { role: 'user', content: promptText }
           ],
-          temperature: 0.8
+          temperature: 0.8,
+          max_tokens: 800
         })
       });
 
       if (!resp.ok) {
         const text = await resp.text();
-        console.error("Groq error", resp.status, text);
-        showStatus("Groq error: " + resp.status, "err");
-        throw new Error("Groq error");
+        console.error('Groq error', resp.status, text);
+        showStatus('Groq error: ' + resp.status, 'err');
+        throw new Error('Groq error');
       }
 
       const data = await resp.json();
-      const out = data?.choices?.[0]?.message?.content || "(No output)";
-      showStatus("AI response received.", "ok");
+      const out = data?.choices?.[0]?.message?.content || '(No response text from Groq)';
+      showStatus('AI response received.', 'ok');
       return out.trim();
     }
 
@@ -571,15 +787,17 @@
       const provider = providerSelect.value;
       const prompt = buildRantPrompt(mode);
 
-      if (provider === "gemini") return callGemini(prompt);
-      if (provider === "groq") return callGroq(prompt);
-
-      alert("Only Gemini + Groq supported in this version.");
-      throw new Error("Unsupported provider.");
+      if (provider === 'gemini') {
+        return callGemini(prompt);
+      } else if (provider === 'groq') {
+        return callGroq(prompt);
+      } else {
+        throw new Error('Unsupported provider: ' + provider);
+      }
     }
 
     // ---------- BUTTON HANDLERS ----------
-    const outputEl = document.getElementById("output");
+    const outputEl = document.getElementById('output');
 
     async function run(mode) {
       try {
@@ -590,17 +808,16 @@
       }
     }
 
-    document.getElementById("generateBtn").addEventListener("click", () => run("generate"));
-    document.getElementById("rewriteBtn").addEventListener("click", () => run("rewrite"));
-    document.getElementById("shuffleBtn").addEventListener("click", () => run("shuffle"));
-    document.getElementById("punchierBtn").addEventListener("click", () => run("punchier"));
+    document.getElementById('generateBtn').addEventListener('click', () => run('generate'));
+    document.getElementById('rewriteBtn').addEventListener('click', () => run('rewrite'));
+    document.getElementById('shuffleBtn').addEventListener('click', () => run('shuffle'));
+    document.getElementById('punchierBtn').addEventListener('click', () => run('punchier'));
 
-    document.getElementById("copyBtn").addEventListener("click", () => {
-      const txt = outputEl.textContent || "";
+    document.getElementById('copyBtn').addEventListener('click', () => {
+      const txt = outputEl.textContent || '';
       if (!txt.trim()) return;
       navigator.clipboard.writeText(txt);
     });
-
   </script>
 </body>
 </html>
