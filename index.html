@@ -288,6 +288,35 @@
       color: #c62828;
     }
 
+    .api-provider-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .api-provider-row select {
+      flex: 1 1 220px;
+      margin-bottom: 0;
+    }
+
+    .api-guide {
+      margin-top: 14px;
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+      font-size: 12px;
+    }
+
+    .api-guide h4 {
+      margin: 6px 0;
+      font-size: 12px;
+    }
+
+    .api-guide p {
+      margin: 3px 0;
+    }
+
     @media (max-width: 600px) {
       .button-row {
         flex-direction: column;
@@ -359,32 +388,48 @@
 
     <!-- AD PLACEMENT MIDDLE -->
     <div class="ad-box">Ad Placeholder — Mid Content</div>
-    <!-- GEMINI API SETTINGS (COLLAPSIBLE) -->
+
+    <!-- AI PROVIDER & API SETTINGS (COLLAPSIBLE) -->
     <div class="panel">
       <div id="apiHeader" class="api-header">
-        <span>Gemini API Settings</span>
+        <span>AI Provider &amp; API Settings</span>
         <span id="apiChevron">▼</span>
       </div>
 
       <div id="apiBody" class="api-body">
+        <div class="api-provider-row">
+          <label for="providerSelect" style="margin-bottom:0;">AI Provider</label>
+          <select id="providerSelect">
+            <option value="groq" selected>Groq (FREE — Llama 3.1)</option>
+            <option value="gemini">Google Gemini</option>
+            <option value="openrouter">OpenRouter</option>
+            <option value="together">TogetherAI</option>
+          </select>
+        </div>
+
         <div class="api-row">
-          <input id="apiKeyInput" type="password" placeholder="Enter your Gemini API key" />
+          <input id="apiKeyInput" type="password" placeholder="Enter your API key for the selected provider" />
           <button id="toggleKeyBtn" class="btn-secondary api-eye-btn" type="button">👁</button>
           <button id="saveKeyBtn" class="btn-secondary" style="flex:0 0 auto;">Save Key</button>
           <button id="clearKeyBtn" class="btn-secondary" style="flex:0 0 auto;">Clear</button>
         </div>
 
+        <div id="apiStatus" class="api-status"></div>
+
         <div class="api-help">
-          To get your Gemini API Key, visit Google AI Studio.  
-          Click "Get API Key" and then "Create API Key".  
-          Your key is stored securely in your browser's local storage.  
-          <br><br>
-          <a href="https://aistudio.google.com/app/api-keys" target="_blank" rel="noopener noreferrer">
-            Get your Gemini API key here →
-          </a>
+          Your API key is stored securely in your browser's local storage only.
         </div>
 
-        <div id="apiStatus" class="api-status"></div>
+        <div class="api-guide">
+          <h4>How to get your API keys</h4>
+          <p><strong>Groq (recommended free):</strong> Visit groq.com, create an account, go to API Keys, and create a new key.</p>
+          <p><strong>Google Gemini:</strong> Go to Google AI Studio → API Keys → Create Key → use a project with billing enabled.</p>
+          <p><strong>OpenRouter:</strong> Sign up at openrouter.ai, go to API Keys, generate a key, and paste it here.</p>
+          <p><strong>TogetherAI:</strong> Visit api.together.xyz, sign up, create an API key under your account, then paste it here.</p>
+          <p style="margin-top:8px;">
+            Need help? Join our FREE Discord for support, updates, and to communicate with other creators.
+          </p>
+        </div>
       </div>
     </div>
 
@@ -400,7 +445,7 @@
     <!-- FOOTER WITH DISCORD BUTTON + TEXT -->
     <div style="text-align:center; margin-top:20px;">
       <a
-        href="https://discord.gg/Bbz2N7xxwp"
+        href="https://discord.gg/Y4GenJXgEn"
         target="_blank"
         rel="noopener noreferrer"
         style="
@@ -417,10 +462,10 @@
         onmouseover="this.style.opacity='0.85'"
         onmouseout="this.style.opacity='1'"
       >
-        Join our Discord Community →
+        Join our Discord community →
       </a>
       <div style="font-size:12px; margin-top:6px; opacity:0.85;">
-        Get support, updates, and help from other creators.
+        Need help? Join our FREE Discord for support, updates, and to communicate with other creators.
       </div>
     </div>
 
@@ -478,7 +523,7 @@
     updateIntensityLabel();
     updateLengthLabel();
 
-    // ---------- API PANEL (COLLAPSIBLE) ----------
+    // ---------- COLLAPSIBLE API PANEL ----------
     const apiHeader = document.getElementById('apiHeader');
     const apiBody = document.getElementById('apiBody');
     const apiChevron = document.getElementById('apiChevron');
@@ -488,15 +533,20 @@
       apiChevron.textContent = open ? '▲' : '▼';
     });
 
-    // ---------- GEMINI API KEY STORAGE ----------
+    // ---------- AI PROVIDER SELECTION ----------
+    const providerSelect = document.getElementById('providerSelect');
     const apiKeyInput = document.getElementById('apiKeyInput');
     const apiStatus = document.getElementById('apiStatus');
     const saveKeyBtn = document.getElementById('saveKeyBtn');
     const clearKeyBtn = document.getElementById('clearKeyBtn');
     const toggleKeyBtn = document.getElementById('toggleKeyBtn');
 
+    function providerStorageKey() {
+      return 'fsg-key-' + providerSelect.value;
+    }
+
     function getApiKey() {
-      return localStorage.getItem('fsg-gemini-key') || '';
+      return localStorage.getItem(providerStorageKey()) || '';
     }
 
     function showStatus(msg, type) {
@@ -504,101 +554,65 @@
       apiStatus.className = 'api-status ' + (type || '');
     }
 
-    // Load existing key
-    const storedKey = getApiKey();
-    if (storedKey) {
-      apiKeyInput.value = storedKey;
-      showStatus('Gemini API key loaded from your browser.', 'ok');
-      apiBody.classList.add('open');
-      apiChevron.textContent = '▲';
+    function loadProviderKey() {
+      apiKeyInput.value = getApiKey();
+      if (apiKeyInput.value) {
+        showStatus('API key loaded from your browser.', 'ok');
+      } else {
+        showStatus('No API key stored for this provider.', 'err');
+      }
     }
 
-    // Eye toggle: show / hide API key
-    if (toggleKeyBtn) {
-      toggleKeyBtn.addEventListener('click', () => {
-        const isPassword = apiKeyInput.type === 'password';
-        apiKeyInput.type = isPassword ? 'text' : 'password';
-        toggleKeyBtn.textContent = isPassword ? '🙈' : '👁';
-      });
-    }
+    providerSelect.addEventListener('change', () => {
+      loadProviderKey();
+    });
+
+    loadProviderKey();
 
     saveKeyBtn.addEventListener('click', () => {
       const key = apiKeyInput.value.trim();
       if (!key) {
-        showStatus('Please enter a valid Gemini API key.', 'err');
+        showStatus('Please enter a valid API key.', 'err');
         return;
       }
-      localStorage.setItem('fsg-gemini-key', key);
-      showStatus('API key saved in your browser (local only).', 'ok');
+      localStorage.setItem(providerStorageKey(), key);
+      showStatus('API key saved for this provider.', 'ok');
     });
 
     clearKeyBtn.addEventListener('click', () => {
-      localStorage.removeItem('fsg-gemini-key');
+      localStorage.removeItem(providerStorageKey());
       apiKeyInput.value = '';
-      showStatus('API key cleared. Add one to use AI features.', 'err');
+      showStatus('API key cleared.', 'err');
     });
-    // ---------- GEMINI CALL (FULLY FIXED — NO MORE 404) ----------
-    async function callGemini(promptText) {
-      const key = getApiKey();
-      if (!key) {
-        showStatus('Add your Gemini API key to generate AI rants.', 'err');
-        throw new Error('No API key');
+
+    // ---------- KEY VISIBILITY TOGGLE ----------
+    toggleKeyBtn.addEventListener('click', () => {
+      if (apiKeyInput.type === 'password') {
+        apiKeyInput.type = 'text';
+        toggleKeyBtn.textContent = '🙈';
+      } else {
+        apiKeyInput.type = 'password';
+        toggleKeyBtn.textContent = '👁';
       }
+    });
 
-      showStatus('Talking to Gemini...', '');
-
-      const body = {
-        contents: [{
-          role: "user",
-          parts: [{ text: promptText }]
-        }]
-      };
-
-      // ✅ Correct 2025 endpoint (404-proof)
-      const url =
-     'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-lite:generateContent?key='
-
-        encodeURIComponent(key);
-
-      const resp = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-
-      if (!resp.ok) {
-        const errText = await resp.text();
-        console.error("Gemini error:", resp.status, errText);
-        showStatus("Gemini error: " + resp.status, "err");
-        throw new Error(errText);
-      }
-
-      const data = await resp.json();
-      const text =
-        data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-        "(Gemini returned no text)";
-      
-      showStatus("AI response received.", "ok");
-      return text.trim();
-    }
-
-    // ---------- PROMPT BUILDER ----------
+    // ---------- BUILD GENERIC RANT PROMPT ----------
     function buildBaseInstructions() {
       return `
-You are an expert Roblox-style rant narrator with fast pacing, Gen-Z humor, dramatic escalation, and punchy lines.
+You are an expert Roblox-style rant narrator with fast pacing, Gen-Z humor, dramatic buildup, and punchy lines.
 You ALWAYS start with "I'm starting to realize..."
-Write short, sharp, rhythmic lines for TikTok / YouTube Shorts rant style.
-You NEVER use emojis or hashtags.
-You NEVER break character and NEVER mention AI.
+You write short, sharp, fast, rhythmic sentences — like a TikTok or YouTube Shorts rant creator.
+You NEVER use emojis. You NEVER use hashtags.
+You NEVER break character. You NEVER mention you're an AI.
 
-SAFETY RULES:
-- No slurs, hate speech, bullying, discrimination.
-- No sexual content.
-- PG-13 frustration allowed only when spicy mode is ON.
-- No graphic violence, self-harm, or dangerous themes.
+Mandatory safety:
+- No slurs, hate speech, bullying, or discrimination.
+- No explicit sexual content or adult themes.
+- No self-harm, threats, or graphic violence.
+- PG-13 language ONLY unless spicy mode is on.
 `;
     }
-
+    // ---------- BUILD COMPLETE PROMPT ----------
     function buildRantPrompt(mode) {
       const topic = document.getElementById('topicInput').value.trim();
       const pasted = document.getElementById('pasteInput').value.trim();
@@ -609,128 +623,101 @@ SAFETY RULES:
       const narrator = document.getElementById('narratorSelect').value;
       const outputText = document.getElementById('output').innerText.trim();
 
-      // Intensity descriptor
-      let intensityLabel = ['Very chill', 'Cool', 'Salty', 'Full meltdown'][intensity - 1];
+      let intensityLabel = 'Cool';
+      if (intensity === 1) intensityLabel = 'Very chill';
+      else if (intensity === 2) intensityLabel = 'Cool';
+      else if (intensity === 3) intensityLabel = 'Salty';
+      else intensityLabel = 'Full meltdown';
 
-      // Length descriptor
-      let lengthLabel = ['short', 'medium', 'long', 'extra long'][lengthVal - 1];
+      let lengthLabel = 'medium';
+      if (lengthVal === 1) lengthLabel = 'short';
+      else if (lengthVal === 2) lengthLabel = 'medium';
+      else if (lengthVal === 3) lengthLabel = 'long';
+      else lengthLabel = 'extra long';
 
-      // Narrator voice
-      let narratorDesc = {
-        male: "a male Roblox rant narrator",
-        female: "a slightly sassy feminine narrator",
-        neutral: "a gender-neutral narrator"
-      }[narrator];
+      let narratorDesc = 'a gender-neutral narrator';
+      if (narrator === 'male') narratorDesc = 'a male Roblox rant narrator';
+      else if (narrator === 'female') narratorDesc = 'a slightly sassy feminine rant narrator';
 
       let styleBlock = `
-STYLE:
-- Narrator: ${narratorDesc}
-- Intensity: ${intensityLabel}
-- Length: ${lengthLabel}
-${includeSlang ? "- Gen-Z slang allowed\n" : "- Minimal slang\n"}
-${spicy ? "- PG-13 spicy frustration words allowed (no F-bombs)\n" : "- Clean language only\n"}
+STYLE SETTINGS:
+- Narrator: ${narratorDesc}.
+- Intensity: ${intensityLabel}.
+- Rant length: ${lengthLabel}.
 `;
 
-      let taskBlock = "";
+      if (includeSlang) {
+        styleBlock += '- Allow Gen-Z slang when natural.\n';
+      } else {
+        styleBlock += '- Avoid heavy slang.\n';
+      }
 
-      if (mode === "generate") {
-        const safeTopic =
-          topic || "a chaotic real-life situation (school, parents, lag, drama, adulting)";
-        taskBlock = `
-TASK:
-Write a Roblox-style rant starting with "I'm starting to realize..."
-Topic: "${safeTopic}"
-Make it fast, funny, relatable, escalating, and viral-ready.
+      if (spicy) {
+        styleBlock += `
+- Spicy Mode ON: allow mild PG-13 frustration words like "damn", "heck", "bro what".
+- No F-bombs or explicit profanity.
+`;
+      } else {
+        styleBlock += `
+- Spicy Mode OFF: clean frustration only — no profanity.
 `;
       }
 
-      else if (mode === "rewrite") {
-        const baseText = pasted || outputText || "(no script provided)";
-        taskBlock = `
-TASK:
-Rewrite and improve this rant into a more viral Roblox-style version:
-"""${baseText}"""
-`;
-      }
+      let taskBlock = '';
 
-      else if (mode === "shuffle") {
+      if (mode === 'generate') {
         const safeTopic =
-          topic || "a relatable chaotic situation in daily life";
+          topic || 'a chaotic real-life situation (school, parents, friends, work, money, social media)';
         taskBlock = `
 TASK:
-Write a NEW rant variation about:
+Write a Roblox-style rant starting with "I'm starting to realize..." about:
 "${safeTopic}"
-Different jokes, different angle — same theme.
+
+Make it fast, funny, relatable, escalating, and creator-ready.
 `;
       }
 
-      else if (mode === "punchier") {
-        const baseText = pasted || outputText || "(no script provided)";
+      else if (mode === 'rewrite') {
+        const baseText = pasted || outputText || '(no script provided)';
         taskBlock = `
 TASK:
-Make this rant more unique, punchy, clean, and viral:
+Rewrite and improve the following rant script.
+Keep the same theme, but make it more viral, punchier, cleaner, and Roblox-rant style.
+
+Original script:
 """${baseText}"""
 `;
       }
 
-      return buildBaseInstructions() + "\n" + styleBlock + "\n" + taskBlock;
-    }
+      else if (mode === 'shuffle') {
+        const safeTopic =
+          topic ||
+          'a relatable chaotic life situation (school, friends, parents, lag, chores, adulting)';
+        taskBlock = `
+TASK:
+Create a DIFFERENT variation of a rant about:
+"${safeTopic}"
 
-    // ---------- BUTTON HANDLERS ----------
-    const outputEl = document.getElementById("output");
-
-    async function handleGenerate() {
-      try {
-        const prompt = buildRantPrompt("generate");
-        const text = await callGemini(prompt);
-        outputEl.textContent = text;
-      } catch (err) {
-        console.error(err);
+New angle, new jokes, new mini-story — same theme, fresh result.
+`;
       }
-    }
 
-    async function handleRewrite() {
-      try {
-        const prompt = buildRantPrompt("rewrite");
-        const text = await callGemini(prompt);
-        outputEl.textContent = text;
-      } catch (err) {
-        console.error(err);
+      else if (mode === 'punchier') {
+        const baseText = pasted || outputText || '(no script provided)';
+        taskBlock = `
+TASK:
+Make this script more unique, punchy, tight, and viral.
+
+Script:
+"""${baseText}"""
+`;
       }
+
+      return buildBaseInstructions() + '\n' + styleBlock + '\n' + taskBlock;
     }
 
-    async function handleShuffle() {
-      try {
-        const prompt = buildRantPrompt("shuffle");
-        const text = await callGemini(prompt);
-        outputEl.textContent = text;
-      } catch (err) {
-        console.error(err);
-      }
-    }
+    // ---------- AI PROVIDER REQUEST WRAPPERS ----------
 
-    async function handlePunchier() {
-      try {
-        const prompt = buildRantPrompt("punchier");
-        const text = await callGemini(prompt);
-        outputEl.textContent = text;
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    function handleCopy() {
-      const txt = outputEl.textContent || "";
-      if (!txt.trim()) return;
-      navigator.clipboard.writeText(txt);
-    }
-
-    document.getElementById('generateBtn').addEventListener('click', handleGenerate);
-    document.getElementById('rewriteBtn').addEventListener('click', handleRewrite);
-    document.getElementById('shuffleBtn').addEventListener('click', handleShuffle);
-    document.getElementById('punchierBtn').addEventListener('click', handlePunchier);
-    document.getElementById('copyBtn').addEventListener('click', handleCopy);
-  </script>
-
-</body>
-</html>
+    async function callGroq(prompt) {
+      const key = getApiKey();
+      if (!
