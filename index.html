@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Roblox Rant Generator</title>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -14,800 +14,273 @@
       --primary-glow: rgba(57,255,20,0.5);
       --bg-light: #ffffff;
       --bg-dark: #0b0d11;
-      --text-light: #0d0d0d;
-      --text-dark: #f5f5f5;
-      --border: #2d2d2d;
+      --text-light: #1a1a1a;
+      --text-dark: #f7f7f7;
+      --border: #2c2c2c;
       --card-light: #ffffff;
       --card-dark: #11151c;
-      --topbar-bg-light: #f7f7f7;
-      --topbar-bg-dark: #05060a;
-    }
-
-    body.light {
-      background: var(--bg-light);
-      color: var(--text-light);
-    }
-
-    body.dark {
-      background: var(--bg-dark);
-      color: var(--text-dark);
     }
 
     body {
-      font-family: "Rubik", sans-serif;
       margin: 0;
-      padding: 0;
+      font-family: "Rubik", sans-serif;
       transition: background 0.3s ease, color 0.3s ease;
     }
 
-    /* Top bar */
+    body.light { background: var(--bg-light); color: var(--text-light); }
+    body.dark { background: var(--bg-dark); color: var(--text-dark); }
+
     .top-bar {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 8px 16px;
+      align-items: center;
+      padding: 10px 16px;
       border-bottom: 1px solid var(--border);
-      background: var(--topbar-bg-light);
+      background: rgba(0,0,0,0.05);
       position: sticky;
       top: 0;
-      z-index: 50;
-    }
-    body.dark .top-bar {
-      background: var(--topbar-bg-dark);
+      z-index: 10;
     }
 
-    .top-brand {
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-    }
+    body.dark .top-bar { background: rgba(255,255,255,0.05); }
 
-    .top-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    /* SupaData-style theme button */
-    .theme-mode-btn {
+    .theme-btn {
+      border: 1px solid var(--border);
+      background: transparent;
       padding: 6px 14px;
       border-radius: 20px;
-      border: 1px solid var(--border);
-      background: transparent;
+      cursor: pointer;
       font-size: 14px;
-      cursor: pointer;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: 0.25s ease;
+      transition: 0.2s;
     }
 
-    body.light .theme-mode-btn {
-      color: #111;
-      background: #f6f6f6;
-    }
-
-    body.dark .theme-mode-btn {
-      color: #f5f5f5;
-      background: #15171c;
-    }
-
-    .theme-mode-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 0 6px var(--primary-glow);
-    }
-
-    /* Discord icon button */
-    .discord-icon-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: transparent;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-      text-decoration: none;
-    }
-    .discord-icon-btn:hover {
-      background: rgba(88,101,242,0.12);
-      transform: translateY(-1px);
-      box-shadow: 0 0 6px rgba(88,101,242,0.5);
-    }
-
-    .discord-icon-btn svg {
-      width: 18px;
-      height: 18px;
-      fill: #5865f2;
-    }
+    .theme-btn:hover { transform: translateY(-1px); }
 
     .container {
       max-width: 900px;
-      margin: 24px auto 40px;
+      margin: 20px auto;
       padding: 0 16px;
     }
 
     h1 {
       text-align: center;
       color: var(--primary);
-      font-weight: 700;
-      margin-bottom: 4px;
       text-shadow: 0 0 8px var(--primary-glow);
-      font-size: 32px;
-    }
-
-    .subtitle {
-      text-align: center;
-      font-size: 14px;
-      opacity: 0.85;
-      margin-bottom: 22px;
-    }
-
-    .ad-box {
-      width: 100%;
-      min-height: 90px;
-      border: 1px dashed var(--border);
-      border-radius: 10px;
-      margin: 16px 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0.7;
-      font-size: 13px;
     }
 
     .panel {
       background: var(--card-light);
-      border-radius: 14px;
-      padding: 18px 18px 20px;
       border: 1px solid var(--border);
+      padding: 18px;
+      border-radius: 12px;
       margin-bottom: 20px;
     }
-    body.dark .panel {
-      background: var(--card-dark);
-    }
 
-    label {
-      font-weight: 600;
-      margin-bottom: 6px;
-      display: block;
-      font-size: 14px;
-    }
+    body.dark .panel { background: var(--card-dark); }
 
-    input[type="text"],
-    input[type="password"],
-    textarea,
-    select {
+    input, textarea, select {
       width: 100%;
-      padding: 10px 12px;
-      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 14px;
       border: 1px solid var(--border);
+      border-radius: 8px;
       background: transparent;
       color: inherit;
       font-size: 14px;
-      margin-bottom: 14px;
-      box-sizing: border-box;
       outline: none;
     }
 
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-
-    input:focus,
-    textarea:focus,
-    select:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 8px var(--primary-glow);
-    }
-
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-top: 4px;
-      margin-bottom: 6px;
-    }
-
-    .row > .col {
-      flex: 1 1 180px;
-    }
-
-    .slider-label {
-      font-weight: 600;
-      font-size: 13px;
-      margin-bottom: 4px;
-    }
-
-    .slider-value {
-      font-size: 12px;
-      opacity: 0.75;
-      margin-top: 2px;
-    }
-
-    input[type="range"] {
-      width: 100%;
-    }
-
-    .toggles {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 8px;
-    }
-
-    .toggles label {
-      font-weight: 500;
-      font-size: 13px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      margin-bottom: 0;
-    }
-
     button {
-      border: none;
-      padding: 11px 14px;
+      padding: 10px 14px;
       border-radius: 8px;
-      font-weight: 700;
       cursor: pointer;
+      border: none;
       font-size: 14px;
-      transition: 0.2s;
-      display: inline-block;
+      font-weight: 600;
     }
 
-    .btn-primary {
-      background: var(--primary);
-      color: #000;
-    }
-
-    .btn-secondary {
-      background: transparent;
-      color: inherit;
-      border: 1px solid var(--border);
-    }
-
-    button:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-      box-shadow: 0 0 8px var(--primary-glow);
-    }
-
-    .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
-    }
+    .btn-primary { background: var(--primary); color: #000; }
+    .btn-secondary { background: transparent; border: 1px solid var(--border); color: inherit; }
 
     #output {
+      min-height: 120px;
       white-space: pre-wrap;
-      line-height: 1.55rem;
-      font-size: 1.02rem;
-      min-height: 140px;
+      padding: 10px;
     }
 
-    /* API section */
-    .api-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-    }
-    .api-header span:last-child {
-      font-size: 18px;
-    }
+    .flex { display: flex; gap: 10px; flex-wrap: wrap; }
+    .status-ok { color: #28a745; font-size: 12px; }
+    .status-err { color: #d32f2f; font-size: 12px; }
 
-    .api-body {
-      margin-top: 10px;
-      display: none;
-    }
-    .api-body.open {
-      display: block;
-    }
-
-    .api-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .api-row input {
-      flex: 1 1 220px;
-      margin-bottom: 0;
-    }
-
-    .api-eye-btn {
-      flex: 0 0 auto;
-      padding: 8px 10px;
-      font-size: 14px;
-      line-height: 1;
-    }
-
-    .api-status {
-      font-size: 12px;
-      margin-top: 6px;
-      min-height: 16px;
-    }
-    .api-status.ok {
-      color: #2e7d32;
-    }
-    .api-status.err {
-      color: #c62828;
-    }
-
-    .api-help {
-      font-size: 12px;
-      margin-top: 6px;
-      opacity: 0.9;
-    }
-
-    .api-help a {
-      color: var(--primary);
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    .api-help a:hover {
-      text-decoration: underline;
-    }
-
-    .api-link-btn {
-      margin-top: 8px;
-      display: inline-block;
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      font-size: 12px;
-      text-decoration: none;
-      color: inherit;
-      transition: 0.2s;
-      margin-right: 6px;
-    }
-
-    .api-link-btn:hover {
-      border-color: var(--primary);
-      box-shadow: 0 0 6px var(--primary-glow);
-      transform: translateY(-1px);
-    }
-
-    /* Footer */
-    .footer-note {
-      font-size: 12px;
-      text-align: center;
-      opacity: 0.8;
-      margin-top: 18px;
-    }
-    .footer-note a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .footer-note a:hover {
-      text-decoration: underline;
-    }
-
-    @media (max-width: 600px) {
-      .top-bar {
-        padding: 8px 10px;
-      }
-      .button-row {
-        flex-direction: column;
-      }
-    }
   </style>
 </head>
 
 <body class="light">
-  <!-- TOP BAR -->
-  <div class="top-bar">
-    <div class="top-brand">Roblox Rant Generator</div>
 
-    <div class="top-right">
-      <!-- Theme Mode Button -->
-      <button id="themeModeBtn" class="theme-mode-btn">🌙 Dark</button>
+<!-- Top Bar -->
+<div class="top-bar">
+  <div><strong>Roblox Rant Generator</strong></div>
+  <button id="themeToggle" class="theme-btn">🌙 Dark</button>
+</div>
 
-      <!-- Discord Button -->
-      <a
-        href="https://discord.gg/Y4GenJXgEn"
-        class="discord-icon-btn"
-        target="_blank"
-        rel="noopener noreferrer"
-        title="Join our Discord community"
-      >
-        <svg viewBox="0 0 245 240">
-          <path d="M104.4 104.9c-5.7 0-10.2 5-10.2 11.1s4.6 11.1 10.2 11.1c5.7 0 10.2-5 10.2-11.1.1-6.1-4.5-11.1-10.2-11.1zm36.2 0c-5.7 0-10.2 5-10.2 11.1s4.6 11.1 10.2 11.1c5.7 0 10.2-5 10.2-11.1s-4.5-11.1-10.2-11.1z"/>
-          <path d="M189.5 20h-134C42.2 20 32 30.2 32 42.7v134.6c0 12.5 10.2 22.7 23.5 22.7h113.3l-5.3-18.5 12.8 11.9 12.1 11.3 21.5 19V42.7C209.8 30.2 199.6 20 186.3 20h3.2zm-39.2 135.2s-3.7-4.4-6.8-8.3c13.5-3.8 18.6-12.2 18.6-12.2-4.2 2.7-8.2 4.6-11.8 5.9-5.1 2.1-9.9 3.4-14.6 4.2-9.6 1.8-18.4 1.3-25.9-.1-5.7-1.1-10.6-2.6-14.7-4.2-2.3-.9-4.8-2-7.3-3.4-.3-.2-.6-.3-.9-.5-.2-.1-.3-.2-.4-.3-1.8-1-2.8-1.7-2.8-1.7s4.9 8.2 17.9 12.1c-3.1 3.9-6.9 8.5-6.9 8.5-22.8-.7-31.5-15.7-31.5-15.7 0-33.3 14.9-60.3 14.9-60.3 14.9-11.2 29.1-10.9 29.1-10.9l1 1.2c-18.7 5.4-27.3 13.7-27.3 13.7s2.3-1.3 6.1-3.1c11.1-4.9 19.9-6.2 23.5-6.5.6-.1 1.1-.2 1.7-.2 6.1-.8 13-1 20.2-.2 9.5 1.1 19.7 3.9 30.1 9.6 0 0-8.2-7.8-25.9-13.2l1.4-1.6s14.2-.3 29.1 10.9c0 0 14.9 27 14.9 60.3 0 0-8.8 15-31.6 15.7z"/>
-        </svg>
-      </a>
+<div class="container">
+
+  <h1>Roblox Rant Generator</h1>
+
+  <!-- Rant Panel -->
+  <div class="panel">
+    <label>Topic</label>
+    <input id="topicInput" placeholder="school, lag, annoying kids, etc">
+
+    <label>Paste rant to rewrite (optional)</label>
+    <textarea id="pasteInput" placeholder="Paste text to rewrite…"></textarea>
+
+    <div class="flex">
+      <button class="btn-primary" id="generateBtn">Generate</button>
+      <button class="btn-secondary" id="rewriteBtn">Rewrite</button>
+      <button class="btn-secondary" id="shuffleBtn">Shuffle</button>
+      <button class="btn-secondary" id="uniqueBtn">Make Unique</button>
+      <button class="btn-secondary" id="copyBtn">Copy</button>
     </div>
   </div>
 
-  <div class="container">
-    <h1>Roblox Rant Generator</h1>
-    <div class="subtitle">Type your theme, build your rant, bye-bye noob.</div>
+  <!-- API Settings -->
+  <div class="panel">
+    <label>Choose Provider</label>
+    <select id="providerSelect">
+      <option value="groq">Groq (Llama3-70B)</option>
+      <option value="gemini">Google Gemini</option>
+    </select>
 
-    <!-- AD TOP -->
-    <div class="ad-box">Ad Placeholder — Top Banner</div>
+    <label>API Key</label>
+    <input id="apiKeyInput" type="password" placeholder="Enter API key">
 
-    <!-- RANT CONTROLS -->
-    <div class="panel">
-      <label for="topicInput">Topic / Theme</label>
-      <input id="topicInput" type="text" placeholder="e.g. school, lag, strict parents, annoying friends, adulting" />
-
-      <label for="pasteInput">Paste Your Rant Script Here (optional)</label>
-      <textarea id="pasteInput" placeholder="Paste any rant to rewrite..."></textarea>
-
-      <label for="narratorSelect">Narrator Style</label>
-      <select id="narratorSelect">
-        <option value="male">Male Narrator</option>
-        <option value="neutral">Gender-neutral Narrator</option>
-        <option value="female">Slightly Sassy Female Narrator</option>
-      </select>
-
-      <div class="row">
-        <div class="col">
-          <div class="slider-label">Intensity</div>
-          <input id="intensitySlider" type="range" min="1" max="4" value="2" />
-          <div id="intensityLabel" class="slider-value">Cool</div>
-        </div>
-
-        <div class="col">
-          <div class="slider-label">Length</div>
-          <input id="lengthSlider" type="range" min="1" max="4" value="2" />
-          <div id="lengthLabel" class="slider-value">Medium rant</div>
-        </div>
-      </div>
-
-      <div class="toggles">
-        <label><input id="includeSlang" type="checkbox" checked /> Include slang</label>
-        <label><input id="spicyMode" type="checkbox" /> Spicy Mode (PG-13)</label>
-      </div>
-
-      <div class="button-row">
-        <button id="generateBtn" class="btn-primary">Generate Rant</button>
-        <button id="rewriteBtn" class="btn-secondary">Rewrite</button>
-        <button id="shuffleBtn" class="btn-secondary">Shuffle</button>
-        <button id="punchierBtn" class="btn-secondary">Make Unique</button>
-        <button id="copyBtn" class="btn-secondary">Copy</button>
-      </div>
+    <div class="flex">
+      <button class="btn-secondary" id="showKeyBtn">👁</button>
+      <button class="btn-secondary" id="saveKeyBtn">Save</button>
+      <button class="btn-secondary" id="clearKeyBtn">Clear</button>
     </div>
 
-    <!-- AD MID -->
-    <div class="ad-box">Ad Placeholder — Middle Banner</div>
-
-    <!-- API SETTINGS -->
-    <div class="panel">
-      <div id="apiHeader" class="api-header">
-        <span>AI Provider & API Key</span>
-        <span id="apiChevron">▼</span>
-      </div>
-
-      <div id="apiBody" class="api-body">
-        <label for="providerSelect">Choose AI Provider</label>
-        <select id="providerSelect">
-          <option value="groq">Groq (Llama 3.1 70B)</option>
-          <option value="gemini">Google Gemini</option>
-        </select>
-
-        <div class="api-row">
-          <input id="apiKeyInput" type="password" placeholder="Enter your API key" />
-          <button id="toggleKeyBtn" class="btn-secondary api-eye-btn" type="button">👁</button>
-          <button id="saveKeyBtn" class="btn-secondary" type="button">Save</button>
-          <button id="clearKeyBtn" class="btn-secondary" type="button">Clear</button>
-        </div>
-
-        <div id="apiStatus" class="api-status">No API key saved yet.</div>
-
-        <div class="api-help">
-          Your API key is stored only in your browser (local storage).<br/>
-          The Worker calls Groq or Gemini using your key.
-        </div>
-
-        <a class="api-link-btn" href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">
-          👉 Get your Groq API key
-        </a>
-        <a class="api-link-btn" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">
-          👉 Get your Gemini API key
-        </a>
-      </div>
-    </div>
-
-    <!-- OUTPUT -->
-    <div class="panel">
-      <label>Generated Rant Script</label>
-      <div id="output">Your rant will appear here...</div>
-    </div>
-
-    <!-- AD BOTTOM -->
-    <div class="ad-box">Ad Placeholder — Footer Banner</div>
-
-    <div class="footer-note">
-      Need help? <a href="https://discord.gg/Y4GenJXgEn" target="_blank" rel="noopener noreferrer">Join our FREE Discord</a>.
-    </div>
+    <div id="apiStatus" class="status-err">No key saved</div>
   </div>
 
-  <!-- JAVASCRIPT -->
-  <script>
-    /* THEME TOGGLE */
-    const themeBtn = document.getElementById("themeModeBtn");
+  <!-- Output -->
+  <div class="panel">
+    <label>Generated Output</label>
+    <div id="output">Your rant will appear here…</div>
+  </div>
 
-    function systemPrefersDark() {
-      return window.matchMedia &&
-             window.matchMedia("(prefers-color-scheme: dark)").matches;
-    }
+</div>
 
-    function applyTheme(mode) {
-      document.body.classList.remove("light", "dark");
-      document.body.classList.add(mode);
-      localStorage.setItem("fsg-theme", mode);
-      themeBtn.textContent = mode === "dark" ? "🌙 Dark" : "☀️ Light";
-    }
+<script>
+/* ---------------- THEME ---------------- */
+const themeBtn = document.getElementById("themeToggle");
+function applyTheme(mode) {
+  document.body.classList.remove("light","dark");
+  document.body.classList.add(mode);
+  themeBtn.textContent = mode === "dark" ? "☀️ Light" : "🌙 Dark";
+  localStorage.setItem("theme", mode);
+}
+applyTheme(localStorage.getItem("theme") || "light");
+themeBtn.onclick = () =>
+  applyTheme(document.body.classList.contains("dark") ? "light" : "dark");
 
-    const savedTheme = localStorage.getItem("fsg-theme");
-    if (savedTheme === "light" || savedTheme === "dark") {
-      applyTheme(savedTheme);
-    } else {
-      applyTheme(systemPrefersDark() ? "dark" : "light");
-    }
 
-    themeBtn.addEventListener("click", () => {
-      const next = document.body.classList.contains("dark") ? "light" : "dark";
-      applyTheme(next);
-    });
+/* ---------------- API STORAGE ---------------- */
+const apiKeyInput = document.getElementById("apiKeyInput");
+const providerSelect = document.getElementById("providerSelect");
+const apiStatus = document.getElementById("apiStatus");
 
-    /* SLIDER LABELS */
-    const intensitySlider = document.getElementById("intensitySlider");
-    const lengthSlider = document.getElementById("lengthSlider");
-    const intensityLabel = document.getElementById("intensityLabel");
-    const lengthLabel = document.getElementById("lengthLabel");
+function loadKey() {
+  apiKeyInput.value = localStorage.getItem("api-key") || "";
+  providerSelect.value = localStorage.getItem("provider") || "groq";
+}
 
-    function updateIntensityLabel() {
-      const v = Number(intensitySlider.value);
-      intensityLabel.textContent =
-        v === 1 ? "Very chill" :
-        v === 2 ? "Cool" :
-        v === 3 ? "Salty" : "Full meltdown";
-    }
+loadKey();
 
-    function updateLengthLabel() {
-      const v = Number(lengthSlider.value);
-      lengthLabel.textContent =
-        v === 1 ? "Short rant" :
-        v === 2 ? "Medium rant" :
-        v === 3 ? "Long rant" : "Max rant";
-    }
+document.getElementById("saveKeyBtn").onclick = () => {
+  localStorage.setItem("api-key", apiKeyInput.value.trim());
+  localStorage.setItem("provider", providerSelect.value);
+  apiStatus.textContent = "API key saved.";
+  apiStatus.className = "status-ok";
+};
 
-    intensitySlider.addEventListener("input", updateIntensityLabel);
-    lengthSlider.addEventListener("input", updateLengthLabel);
-    updateIntensityLabel();
-    updateLengthLabel();
+document.getElementById("clearKeyBtn").onclick = () => {
+  localStorage.removeItem("api-key");
+  apiKeyInput.value = "";
+  apiStatus.textContent = "API key cleared.";
+  apiStatus.className = "status-err";
+};
 
-    /* COLLAPSIBLE API PANEL */
-    const apiHeader = document.getElementById("apiHeader");
-    const apiBody = document.getElementById("apiBody");
-    const apiChevron = document.getElementById("apiChevron");
+document.getElementById("showKeyBtn").onclick = () => {
+  apiKeyInput.type = apiKeyInput.type === "password" ? "text" : "password";
+};
 
-    apiHeader.addEventListener("click", () => {
-      const open = apiBody.classList.toggle("open");
-      apiChevron.textContent = open ? "▲" : "▼";
-    });
 
-    /* API KEY & PROVIDER STORAGE */
-    const apiKeyInput = document.getElementById("apiKeyInput");
-    const apiStatus = document.getElementById("apiStatus");
-    const saveKeyBtn = document.getElementById("saveKeyBtn");
-    const clearKeyBtn = document.getElementById("clearKeyBtn");
-    const toggleKeyBtn = document.getElementById("toggleKeyBtn");
-    const providerSelect = document.getElementById("providerSelect");
+/* ---------------- CALL WORKER ---------------- */
+async function callWorker(prompt) {
+  const apiKey = apiKeyInput.value.trim();
+  const provider = providerSelect.value;
 
-    const STORAGE_KEY = "fsg-user-api-key";
-    const STORAGE_PROVIDER = "fsg-provider";
+  if (!apiKey) {
+    apiStatus.textContent = "Enter your API key.";
+    apiStatus.className = "status-err";
+    return "(No API key)";
+  }
 
-    function showStatus(text, type) {
-      apiStatus.textContent = text;
-      apiStatus.className = "api-status" + (type ? " " + type : "");
-    }
+  const res = await fetch("https://faceless-rant-proxy.bouncingstephen.workers.dev/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ provider, apiKey, prompt }),
+  });
 
-    function loadStoredConfig() {
-      const storedKey = localStorage.getItem(STORAGE_KEY) || "";
-      const storedProvider = localStorage.getItem(STORAGE_PROVIDER) || "groq";
-      apiKeyInput.value = storedKey;
-      providerSelect.value = storedProvider;
-      if (storedKey) {
-        showStatus("API key loaded from your browser.", "ok");
-        apiBody.classList.add("open");
-        apiChevron.textContent = "▲";
-      }
-    }
+  if (!res.ok) {
+    const text = await res.text();
+    apiStatus.textContent = "Error " + res.status;
+    apiStatus.className = "status-err";
+    console.error("Worker error:", text);
+    return "(Error)";
+  }
 
-    loadStoredConfig();
+  const data = await res.json();
 
-    saveKeyBtn.addEventListener("click", () => {
-      const key = apiKeyInput.value.trim();
-      const provider = providerSelect.value;
-      if (!key) {
-        showStatus("Please enter a valid API key.", "err");
-        return;
-      }
-      localStorage.setItem(STORAGE_KEY, key);
-      localStorage.setItem(STORAGE_PROVIDER, provider);
-      showStatus("API key saved.", "ok");
-    });
+  if (provider === "groq") {
+    return data?.choices?.[0]?.message?.content || "(No response)";
+  }
 
-    clearKeyBtn.addEventListener("click", () => {
-      localStorage.removeItem(STORAGE_KEY);
-      apiKeyInput.value = "";
-      showStatus("API key cleared.", "err");
-    });
+  if (provider === "gemini") {
+    return data?.candidates?.[0]?.content?.parts?.[0]?.text || "(No response)";
+  }
 
-    toggleKeyBtn.addEventListener("click", () => {
-      if (apiKeyInput.type === "password") {
-        apiKeyInput.type = "text";
-        toggleKeyBtn.textContent = "🙈";
-      } else {
-        apiKeyInput.type = "password";
-        toggleKeyBtn.textContent = "👁";
-      }
-    });
+  return "(Unknown provider)";
+}
 
-    /* PROMPT BUILDER */
-    function buildPrompt(mode) {
-      const topic = document.getElementById("topicInput").value.trim();
-      const pasted = document.getElementById("pasteInput").value.trim();
-      const intensity = Number(intensitySlider.value);
-      const lengthVal = Number(lengthSlider.value);
-      const includeSlang = document.getElementById("includeSlang").checked;
-      const spicy = document.getElementById("spicyMode").checked;
-      const narrator = document.getElementById("narratorSelect").value;
-      const outputText = document.getElementById("output").innerText.trim();
 
-      const narrators = {
-        male: "a male Roblox rant narrator",
-        neutral: "a gender-neutral narrator",
-        female: "a slightly sassy feminine narrator",
-      };
+/* ---------------- BUTTONS ---------------- */
+const output = document.getElementById("output");
 
-      const intensities = ["Very chill", "Cool", "Salty", "Full meltdown"];
-      const lengths = ["short", "medium", "long", "extra long"];
+async function run(mode) {
+  const topic = document.getElementById("topicInput").value.trim();
+  const paste = document.getElementById("pasteInput").value.trim();
 
-      const styleBlock = `
-NARRATOR: ${narrators[narrator]}
-INTENSITY: ${intensities[intensity - 1]}
-LENGTH: ${lengths[lengthVal - 1]}
-SLANG: ${includeSlang ? "allowed" : "minimal"}
-SPICY MODE: ${spicy ? "mild PG-13 allowed" : "clean only"}
-`;
+  let prompt = "";
 
-      const instructions = `
-You are an expert Roblox rant narrator.
-ALWAYS start with: "I'm starting to realize..."
-Write fast, punchy, chaotic, Gen-Z humor.
-No emojis, no hashtags, no AI disclaimers.
-PG-13 only.
-`;
+  if (mode === "generate") prompt = "Write a Roblox rant about: " + topic;
+  if (mode === "rewrite") prompt = "Rewrite this rant: " + paste;
+  if (mode === "shuffle") prompt = "Create a new variation of a rant about: " + topic;
+  if (mode === "unique") prompt = "Make this rant more unique: " + paste;
 
-      let task = "";
+  output.textContent = await callWorker(prompt);
+}
 
-      if (mode === "generate") {
-        task = `Write a rant about: "${topic || "a chaotic real-life situation"}"`;
-      } else if (mode === "rewrite") {
-        task = `Rewrite this into a stronger Roblox-style rant:\n"""${pasted || outputText || "(no script provided)"}"""`;
-      } else if (mode === "shuffle") {
-        task = `Create a DIFFERENT variation of a rant about: "${topic || "a chaotic situation"}"`;
-      } else if (mode === "punchier") {
-        task = `Make this rant more unique, punchy, and tight:\n"""${pasted || outputText || "(no script provided)"}"""`;
-      }
+document.getElementById("generateBtn").onclick = () => run("generate");
+document.getElementById("rewriteBtn").onclick = () => run("rewrite");
+document.getElementById("shuffleBtn").onclick = () => run("shuffle");
+document.getElementById("uniqueBtn").onclick = () => run("unique");
+document.getElementById("copyBtn").onclick = () => {
+  navigator.clipboard.writeText(output.textContent);
+};
+</script>
 
-      return instructions + styleBlock + "\n" + task;
-    }
-
-    /* CALL CLOUDFLARE WORKER BACKEND */
-    async function callAI(promptText) {
-      const apiKey = apiKeyInput.value.trim() || localStorage.getItem(STORAGE_KEY) || "";
-      const provider = providerSelect.value;
-
-      if (!apiKey) {
-        showStatus("Add your API key first.", "err");
-        throw new Error("Missing API key");
-      }
-
-      // Persist latest choice
-      localStorage.setItem(STORAGE_KEY, apiKey);
-      localStorage.setItem(STORAGE_PROVIDER, provider);
-
-      showStatus("Contacting " + (provider === "groq" ? "Groq…" : "Gemini…"), "");
-
-      const res = await fetch("https://faceless-rant-proxy.bouncingstephen.workers.dev/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          provider,
-          apiKey,
-          prompt: promptText,
-        }),
-      });
-
-      let data = {};
-      try {
-        data = await res.json();
-      } catch (e) {
-        console.error("Failed to parse JSON from worker", e);
-      }
-
-      if (!res.ok) {
-        console.error("Worker error payload:", data);
-        let msg = "Error " + res.status;
-
-        if (data && typeof data === "object") {
-          if (data.error === "GroqError" || data.error === "GeminiError") {
-            const detail = data.detail || {};
-            const innerMsg =
-              (detail.error && detail.error.message) ||
-              detail.message ||
-              data.message;
-            if (innerMsg) msg += " — " + innerMsg;
-          } else if (data.message) {
-            msg += " — " + data.message;
-          }
-        }
-
-        showStatus(msg, "err");
-        throw new Error(msg);
-      }
-
-      showStatus("AI response received.", "ok");
-
-      if (provider === "groq") {
-        return data?.choices?.[0]?.message?.content || "(No response text from Groq)";
-      }
-
-      if (provider === "gemini") {
-        return (
-          data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-          "(No response text from Gemini)"
-        );
-      }
-
-      return "(Unknown provider output)";
-    }
-
-    /* MAIN BUTTON ACTIONS */
-    const outputEl = document.getElementById("output");
-    const generateBtn = document.getElementById("generateBtn");
-    const rewriteBtn = document.getElementById("rewriteBtn");
-    const shuffleBtn = document.getElementById("shuffleBtn");
-    const punchierBtn = document.getElementById("punchierBtn");
-    const copyBtn = document.getElementById("copyBtn");
-
-    async function run(mode) {
-      try {
-        const promptText = buildPrompt(mode);
-        const result = await callAI(promptText);
-        outputEl.textContent = result;
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    generateBtn.onclick = () => run("generate");
-    rewriteBtn.onclick = () => run("rewrite");
-    shuffleBtn.onclick = () => run("shuffle");
-    punchierBtn.onclick = () => run("punchier");
-
-    copyBtn.onclick = () => {
-      const txt = outputEl.textContent || "";
-      if (!txt.trim()) return;
-      navigator.clipboard.writeText(txt);
-    };
-  </script>
 </body>
 </html>
