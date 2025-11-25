@@ -345,18 +345,22 @@
       flex-wrap: wrap;
       gap: 10px;
       align-items: center;
+      margin-bottom: 10px;
     }
     .api-row input {
       flex: 1 1 220px;
       margin-bottom: 0;
     }
 
-    .api-eye-btn {
-      flex: 0 0 auto;
-      padding: 8px 10px;
-      font-size: 18px;
-      line-height: 1;
-      border-radius: 8px;
+    .api-visibility-label {
+      font-size: 13px;
+      font-weight: 500;
+      margin-right: 4px;
+    }
+
+    .api-visibility-select {
+      min-width: 120px;
+      max-width: 160px;
     }
 
     .api-status {
@@ -781,8 +785,15 @@
             type="password"
             placeholder="Paste your Groq API key here"
           />
-          <!-- cleaner icons: 🙈 / 👁 -->
-          <button id="toggleKeyBtn" class="btn-secondary api-eye-btn">🙈</button>
+        </div>
+
+        <div class="api-row">
+          <span class="api-visibility-label">Visibility:</span>
+          <select id="apiVisibilitySelect" class="api-visibility-select">
+            <option value="hidden" selected>Hidden</option>
+            <option value="visible">Visible</option>
+          </select>
+
           <button id="saveKeyBtn" class="btn-secondary">Save</button>
           <button id="clearKeyBtn" class="btn-secondary">Clear</button>
         </div>
@@ -911,10 +922,10 @@
 
     /* API KEY STORAGE (Groq only) */
     const apiKeyInput = document.getElementById("apiKeyInput");
+    const apiVisibilitySelect = document.getElementById("apiVisibilitySelect");
     const apiStatus = document.getElementById("apiStatus");
     const saveKeyBtn = document.getElementById("saveKeyBtn");
     const clearKeyBtn = document.getElementById("clearKeyBtn");
-    const toggleKeyBtn = document.getElementById("toggleKeyBtn");
 
     function showStatus(text, type) {
       apiStatus.textContent = text;
@@ -924,7 +935,16 @@
       return localStorage.getItem("fsg-user-api-key") || "";
     }
 
+    function applyVisibility() {
+      const mode = apiVisibilitySelect.value;
+      apiKeyInput.type = mode === "visible" ? "text" : "password";
+    }
+
+    // Initial values
     apiKeyInput.value = getApiKey();
+    applyVisibility();
+
+    apiVisibilitySelect.addEventListener("change", applyVisibility);
 
     saveKeyBtn.addEventListener("click", () => {
       const key = apiKeyInput.value.trim();
@@ -937,14 +957,6 @@
       localStorage.removeItem("fsg-user-api-key");
       apiKeyInput.value = "";
       showStatus("API key cleared.", "err");
-    });
-
-    toggleKeyBtn.addEventListener("click", () => {
-      apiKeyInput.type =
-        apiKeyInput.type === "password" ? "text" : "password";
-      // 🙈 when hidden, 👁 when visible
-      toggleKeyBtn.textContent =
-        apiKeyInput.type === "password" ? "🙈" : "👁";
     });
 
     /* PROMPT BUILDER + AI CALL */
