@@ -6,7 +6,7 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0"
   />
-  <title>Roblox Rant Generator</title>
+  <title>Faceless Script Generator – Roblox Rant</title>
 
   <link
     href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap"
@@ -18,14 +18,15 @@
       --primary: #39ff14;
       --primary-glow: rgba(57, 255, 20, 0.5);
       --bg-light: #ffffff;
-      --bg-dark: #0b0d11;
+      --bg-dark: #050712;
       --text-light: #0d0d0d;
-      --text-dark: #f5f5f5;
-      --border: #2d2d2d;
+      --text-dark: #f5f7ff;
+      --border-light: #d0d0dd;
+      --border-dark: #262a3b;
       --card-light: #ffffff;
-      --card-dark: #11151c;
-      --topbar-bg-light: #f7f7f7;
-      --topbar-bg-dark: #05060a;
+      --card-dark: #111527;
+      --topbar-bg-light: #f7f7f9;
+      --topbar-bg-dark: #050712;
     }
 
     body.light {
@@ -51,7 +52,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 8px 16px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-light);
       background: var(--topbar-bg-light);
       position: sticky;
       top: 0;
@@ -59,13 +60,14 @@
     }
     body.dark .top-bar {
       background: var(--topbar-bg-dark);
+      border-bottom-color: var(--border-dark);
     }
 
-    /* Home icon button (top-left)  ------------------ CHANGED */
+    /* Home icon button */
     .home-btn {
       border-radius: 999px;
-      border: 1px solid var(--border);
-      background: transparent;
+      border: 1px solid var(--border-light);
+      background: #f6f6f6;
       padding: 6px 10px;
       display: inline-flex;
       align-items: center;
@@ -73,13 +75,10 @@
       cursor: pointer;
       transition: 0.2s ease;
     }
-    body.light .home-btn {
-      background: #f6f6f6;
-      color: #111;
-    }
     body.dark .home-btn {
-      background: #15171c;
-      color: #f5f5f5;
+      background: #14182a;
+      border-color: var(--border-dark);
+      color: #f5f7ff;
     }
     .home-btn svg {
       width: 16px;
@@ -100,22 +99,18 @@
     .how-btn {
       padding: 6px 14px;
       border-radius: 20px;
-      border: 1px solid var(--border);
-      background: transparent;
+      border: 1px solid var(--border-light);
+      background: #f6f6f6;
       font-size: 14px;
       cursor: pointer;
       font-weight: 500;
       transition: 0.25s ease;
     }
-    body.light .theme-mode-btn,
-    body.light .how-btn {
-      color: #111;
-      background: #f6f6f6;
-    }
     body.dark .theme-mode-btn,
     body.dark .how-btn {
-      color: #f5f5f5;
-      background: #15171c;
+      border-color: var(--border-dark);
+      background: #14182a;
+      color: #f5f7ff;
     }
     .theme-mode-btn:hover,
     .how-btn:hover {
@@ -127,7 +122,7 @@
       width: 32px;
       height: 32px;
       border-radius: 999px;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-light);
       background: transparent;
       display: inline-flex;
       align-items: center;
@@ -136,6 +131,9 @@
       transition: background 0.2s ease, transform 0.2s ease,
         box-shadow 0.2s ease;
       text-decoration: none;
+    }
+    body.dark .discord-icon-btn {
+      border-color: var(--border-dark);
     }
     .discord-icon-btn:hover {
       background: rgba(88, 101, 242, 0.12);
@@ -166,14 +164,14 @@
     .subtitle {
       text-align: center;
       font-size: 14px;
-      opacity: 0.85;
+      opacity: 0.9;
       margin-bottom: 22px;
     }
 
     .ad-box {
       width: 100%;
       min-height: 90px;
-      border: 1px dashed var(--border);
+      border: 1px dashed var(--border-light);
       border-radius: 10px;
       margin: 16px 0;
       display: flex;
@@ -182,16 +180,22 @@
       opacity: 0.7;
       font-size: 13px;
     }
+    body.dark .ad-box {
+      border-color: var(--border-dark);
+    }
 
     .panel {
       background: var(--card-light);
       border-radius: 14px;
       padding: 18px 18px 20px;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-light);
       margin-bottom: 20px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
     }
     body.dark .panel {
       background: var(--card-dark);
+      border-color: var(--border-dark);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.7);
     }
 
     label {
@@ -208,13 +212,20 @@
       width: 100%;
       padding: 10px 12px;
       border-radius: 8px;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-light);
       background: transparent;
       color: inherit;
       font-size: 14px;
       margin-bottom: 14px;
       box-sizing: border-box;
       outline: none;
+    }
+    body.dark input[type="text"],
+    body.dark input[type="password"],
+    body.dark textarea,
+    body.dark select {
+      background: #050712;
+      border-color: var(--border-dark);
     }
 
     textarea {
@@ -289,7 +300,11 @@
     .btn-secondary {
       background: transparent;
       color: inherit;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-light);
+    }
+    body.dark .btn-secondary {
+      background: #151b2f;
+      border-color: var(--border-dark);
     }
     button:hover {
       opacity: 0.9;
@@ -339,8 +354,9 @@
     .api-eye-btn {
       flex: 0 0 auto;
       padding: 8px 10px;
-      font-size: 14px;
+      font-size: 18px;
       line-height: 1;
+      border-radius: 8px;
     }
 
     .api-status {
@@ -374,11 +390,14 @@
       display: inline-block;
       padding: 8px 12px;
       border-radius: 8px;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-light);
       font-size: 12px;
       text-decoration: none;
       color: inherit;
       transition: 0.2s;
+    }
+    body.dark .groq-link-btn {
+      border-color: var(--border-dark);
     }
     .groq-link-btn:hover {
       border-color: var(--primary);
@@ -386,7 +405,7 @@
       transform: translateY(-1px);
     }
 
-    /* Footer + Discord button  ------------------ CHANGED */
+    /* Footer + Discord button */
     .footer-note {
       font-size: 12px;
       text-align: center;
@@ -398,7 +417,7 @@
       gap: 8px;
     }
     .footer-note span {
-      opacity: 0.8;
+      opacity: 0.85;
     }
     .discord-footer-btn {
       display: inline-flex;
@@ -440,13 +459,14 @@
       width: 90%;
       background: var(--card-light);
       border-radius: 16px;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-light);
       padding: 18px 22px 16px;
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
       animation: fadeInUp 0.18s ease-out;
     }
     body.dark .modal {
       background: var(--card-dark);
+      border-color: var(--border-dark);
     }
     .modal-header {
       display: flex;
@@ -460,11 +480,15 @@
     }
     .modal-close {
       border-radius: 999px;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-light);
       padding: 4px 10px;
       font-size: 13px;
       cursor: pointer;
       background: transparent;
+    }
+    body.dark .modal-close {
+      border-color: var(--border-dark);
+      color: #f5f7ff;
     }
     .modal-close:hover {
       box-shadow: 0 0 6px var(--primary-glow);
@@ -515,21 +539,21 @@
       opacity: 0.85;
     }
 
-    /* Small toast for home button  ------------------ NEW */
+    /* Home toast message – near home icon */
     .home-toast {
       position: fixed;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.85);
-      color: #f5f5f5;
-      padding: 8px 14px;
+      top: 46px;
+      left: 16px;
+      background: rgba(0, 0, 0, 0.92);
+      color: #f5f7ff;
+      padding: 6px 12px;
       border-radius: 999px;
       font-size: 12px;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.25s ease;
       z-index: 120;
+      border: 1px solid #333955;
     }
     .home-toast.show {
       opacity: 1;
@@ -549,7 +573,7 @@
 <body class="light">
   <!-- TOP BAR -->
   <div class="top-bar">
-    <!-- Home icon instead of text ------------------ CHANGED -->
+    <!-- Home icon -->
     <button id="homeBtn" class="home-btn" title="Home">
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path
@@ -582,12 +606,12 @@
     </div>
   </div>
 
-  <!-- Home toast message  ------------------ NEW -->
+  <!-- Home toast -->
   <div id="homeToast" class="home-toast">
     More faceless generators coming soon.
   </div>
 
-  <!-- HOW TO USE MODAL (unchanged text) -->
+  <!-- HOW TO USE MODAL -->
   <div id="howModal" class="modal-overlay">
     <div class="modal">
       <div class="modal-header">
@@ -646,7 +670,7 @@
   <div class="container">
     <h1>Roblox Rant Generator</h1>
     <div class="subtitle">
-      Type a topic, pick a vibe, and get a viral-style rant you can read over gameplay.
+      Type Your Theme. Create Your Rant. Bye-Bye Noob.
     </div>
 
     <div class="ad-box">Ad Placeholder — Top Banner</div>
@@ -662,7 +686,6 @@
 
       <label for="introSelect">Opening Line Style</label>
       <select id="introSelect">
-        <!-- CHANGED text for random -->
         <option value="random">Random (let AI choose style)</option>
         <option value="I'm starting to realize...">I'm starting to realize...</option>
         <option value="Tell me why this keeps happening...">
@@ -710,7 +733,6 @@
       </div>
 
       <div class="toggles">
-        <!-- labels CHANGED -->
         <label>
           <input id="includeSlang" type="checkbox" checked />
           Include slang
@@ -735,7 +757,7 @@
 
     <div class="ad-box">Ad Placeholder — Middle Banner</div>
 
-    <!-- OUTPUT FIRST -->
+    <!-- OUTPUT -->
     <div class="panel">
       <label for="output">Generated Rant Script</label>
       <textarea
@@ -744,7 +766,7 @@
       ></textarea>
     </div>
 
-    <!-- API SETTINGS (under output) -->
+    <!-- API SETTINGS -->
     <div class="panel">
       <div id="apiHeader" class="api-header">
         <span>Groq API Key</span>
@@ -759,7 +781,8 @@
             type="password"
             placeholder="Paste your Groq API key here"
           />
-          <button id="toggleKeyBtn" class="btn-secondary api-eye-btn">👁</button>
+          <!-- cleaner icons: 🙈 / 👁 -->
+          <button id="toggleKeyBtn" class="btn-secondary api-eye-btn">🙈</button>
           <button id="saveKeyBtn" class="btn-secondary">Save</button>
           <button id="clearKeyBtn" class="btn-secondary">Clear</button>
         </div>
@@ -783,9 +806,9 @@
 
     <div class="ad-box">Ad Placeholder — Footer Banner</div>
 
-    <!-- Footer Discord button  ------------------ CHANGED -->
+    <!-- Footer Discord button -->
     <div class="footer-note">
-      <span>Need help or want feedback on your scripts?</span>
+      <span>For support & connect with other creators.</span>
       <a
         href="https://discord.gg/Y4GenJXgEn"
         target="_blank"
@@ -838,15 +861,13 @@
       if (e.key === "Escape") closeHow();
     });
 
-    /* HOME BUTTON TOAST  ------------------ NEW */
+    /* HOME BUTTON TOAST */
     const homeBtn = document.getElementById("homeBtn");
     const homeToast = document.getElementById("homeToast");
     let homeToastTimeout = null;
 
     homeBtn.addEventListener("click", () => {
-      if (homeToastTimeout) {
-        clearTimeout(homeToastTimeout);
-      }
+      if (homeToastTimeout) clearTimeout(homeToastTimeout);
       homeToast.classList.add("show");
       homeToastTimeout = setTimeout(() => {
         homeToast.classList.remove("show");
@@ -921,11 +942,12 @@
     toggleKeyBtn.addEventListener("click", () => {
       apiKeyInput.type =
         apiKeyInput.type === "password" ? "text" : "password";
+      // 🙈 when hidden, 👁 when visible
       toggleKeyBtn.textContent =
-        apiKeyInput.type === "password" ? "👁" : "🙈";
+        apiKeyInput.type === "password" ? "🙈" : "👁";
     });
 
-    /* PROMPT BUILDER (unchanged logic except labels) */
+    /* PROMPT BUILDER + AI CALL */
     const topicInput = document.getElementById("topicInput");
     const pasteInput = document.getElementById("pasteInput");
     const narratorSelect = document.getElementById("narratorSelect");
@@ -1055,7 +1077,6 @@ Rules:
       return baseInstructions + styleBlock + "\n" + task;
     }
 
-    /* CALL WORKER BACKEND */
     async function callAI(prompt) {
       const apiKey = getApiKey();
 
@@ -1098,7 +1119,6 @@ Rules:
       return data?.choices?.[0]?.message?.content || "(No response)";
     }
 
-    /* BUTTON ACTIONS */
     const generateBtn = document.getElementById("generateBtn");
     const rewriteBtn = document.getElementById("rewriteBtn");
     const shuffleBtn = document.getElementById("shuffleBtn");
