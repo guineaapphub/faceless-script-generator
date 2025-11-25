@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport"width=device-width, initial-scale=1.0" />
   <title>Roblox Rant Generator</title>
 
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
 
   <style>
@@ -65,10 +64,9 @@
     .top-right {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
-    /* SupaData-style theme button */
     .theme-mode-btn {
       padding: 6px 14px;
       border-radius: 20px;
@@ -95,7 +93,29 @@
       box-shadow: 0 0 6px var(--primary-glow);
     }
 
-    /* Discord icon button */
+    .how-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.25s ease;
+    }
+    body.light .how-btn {
+      color: #111;
+      background: #f6f6f6;
+    }
+    body.dark .how-btn {
+      color: #f5f5f5;
+      background: #15171c;
+    }
+    .how-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 6px var(--primary-glow);
+    }
+
     .discord-icon-btn {
       width: 32px;
       height: 32px;
@@ -379,6 +399,81 @@
       text-decoration: underline;
     }
 
+    /* How to Use modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    .modal-overlay.open {
+      display: flex;
+    }
+    .modal {
+      max-width: 520px;
+      width: 90%;
+      background: var(--card-light);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 18px 22px 16px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+      animation: fadeInUp 0.18s ease-out;
+    }
+    body.dark .modal {
+      background: var(--card-dark);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .modal-title {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .modal-close {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      font-size: 13px;
+      cursor: pointer;
+      background: transparent;
+    }
+    .modal-close:hover {
+      box-shadow: 0 0 6px var(--primary-glow);
+    }
+    .modal-body {
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .modal-body ol {
+      padding-left: 18px;
+      margin-top: 6px;
+      margin-bottom: 8px;
+    }
+    .modal-body li {
+      margin-bottom: 4px;
+    }
+    .modal-tip {
+      margin-top: 8px;
+      font-size: 12px;
+      opacity: 0.8;
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     @media (max-width: 600px) {
       .top-bar {
         padding: 8px 10px;
@@ -397,6 +492,7 @@
 
     <div class="top-right">
       <button id="themeModeBtn" class="theme-mode-btn">🌙 Dark</button>
+      <button id="howToBtn" class="how-btn">How to Use</button>
 
       <a href="https://discord.gg/Y4GenJXgEn"
          class="discord-icon-btn"
@@ -411,50 +507,76 @@
     </div>
   </div>
 
+  <!-- HOW TO USE MODAL -->
+  <div id="howModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">How to Use the Roblox Rant Generator</div>
+        <button id="howClose" class="modal-close">Close</button>
+      </div>
+      <div class="modal-body">
+        <ol>
+          <li><strong>Type a Topic / Theme</strong> in the box (e.g., “school”, “strict parents”, “laggy servers”, “memes”).</li>
+          <li><strong>Set Rant Meltdown</strong> to choose the tone (Very chill → Full meltdown).</li>
+          <li><strong>Adjust Length</strong> to control how long the rant sounds (about 10–60 seconds).</li>
+          <li><strong>Pick a Narrator</strong> – male, gender-neutral, or female.</li>
+          <li><strong>Toggles:</strong> turn slang on/off and use <strong>Salty Mode</strong> if you want extra attitude (still PG-13).</li>
+          <li><strong>Optional:</strong> paste any rant into the box to rewrite or improve it.</li>
+          <li>Click <strong>Generate Rant</strong>, <strong>Rewrite</strong>, <strong>New Version</strong>, or <strong>Make Unique</strong> to create a script.</li>
+          <li>Your rant appears below – tweak anything you want, then hit <strong>Copy</strong> and drop it into your Roblox or meme video.</li>
+          <li>Make sure you’ve added your <strong>Groq API key</strong> in the API section so the AI can work.</li>
+        </ol>
+        <div class="modal-tip">
+          Tip: Short, simple topics usually give the strongest, most relatable rants.
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="container">
     <h1>Roblox Rant Generator</h1>
-    <div class="subtitle">Type your theme, build your rant, bye-bye noob.</div>
+    <div class="subtitle">Type a topic, get a viral-style rant you can read over gameplay.</div>
 
     <div class="ad-box">Ad Placeholder — Top Banner</div>
 
     <!-- RANT CONTROLS -->
     <div class="panel">
       <label for="topicInput">Topic / Theme</label>
-      <input id="topicInput" type="text" placeholder="e.g. school, lag, strict parents, annoying friends, adulting" />
+      <input id="topicInput" type="text" placeholder="e.g. school, laggy servers, strict parents, annoying friends" />
 
       <label for="pasteInput">Paste Your Rant Script Here (optional)</label>
-      <textarea id="pasteInput" placeholder="Paste any rant to rewrite..."></textarea>
+      <textarea id="pasteInput" placeholder="Paste any rant to rewrite, improve, or remix..."></textarea>
 
       <label for="narratorSelect">Narrator Style</label>
       <select id="narratorSelect">
         <option value="male">Male Narrator</option>
         <option value="neutral">Gender-neutral Narrator</option>
-        <option value="female">Slightly Sassy Female Narrator</option>
+        <option value="female">Female Narrator</option>
       </select>
 
       <div class="row">
         <div class="col">
-          <div class="slider-label">Intensity</div>
+          <div class="slider-label">Rant Meltdown</div>
           <input id="intensitySlider" type="range" min="1" max="4" value="2" />
-          <div id="intensityLabel" class="slider-value">Cool</div>
+          <div id="intensityLabel" class="slider-value">Cool / casual</div>
         </div>
         <div class="col">
           <div class="slider-label">Length</div>
           <input id="lengthSlider" type="range" min="1" max="4" value="2" />
-          <div id="lengthLabel" class="slider-value">Medium rant</div>
+          <div id="lengthLabel" class="slider-value">~20–30 second rant</div>
         </div>
       </div>
 
       <div class="toggles">
-        <label><input id="includeSlang" type="checkbox" checked /> Include slang</label>
-        <label><input id="spicyMode" type="checkbox" /> Spicy Mode (PG-13)</label>
+        <label><input id="includeSlang" type="checkbox" checked /> Include Gen Z slang</label>
+        <label><input id="saltyMode" type="checkbox" /> Salty Mode (still PG-13)</label>
       </div>
 
       <div class="button-row">
         <button id="generateBtn" class="btn-primary">Generate Rant</button>
         <button id="rewriteBtn" class="btn-secondary">Rewrite</button>
-        <button id="shuffleBtn" class="btn-secondary">Shuffle</button>
-        <button id="punchierBtn" class="btn-secondary">Make Unique</button>
+        <button id="shuffleBtn" class="btn-secondary">New Version</button>
+        <button id="uniqueBtn" class="btn-secondary">Make Unique</button>
         <button id="copyBtn" class="btn-secondary">Copy</button>
       </div>
     </div>
@@ -464,19 +586,14 @@
     <!-- API SETTINGS -->
     <div class="panel">
       <div id="apiHeader" class="api-header">
-        <span>AI Provider & API Key</span>
+        <span>Groq API Key</span>
         <span id="apiChevron">▼</span>
       </div>
 
       <div id="apiBody" class="api-body">
-        <label for="providerSelect">Choose AI Provider</label>
-        <select id="providerSelect">
-          <option value="groq">Groq (Llama 3.3 70B)</option>
-          <option value="gemini">Google Gemini</option>
-        </select>
-
+        <label for="apiKeyInput">Your Groq API key</label>
         <div class="api-row">
-          <input id="apiKeyInput" type="password" placeholder="Enter your API key" />
+          <input id="apiKeyInput" type="password" placeholder="Paste your Groq API key here" />
           <button id="toggleKeyBtn" class="btn-secondary api-eye-btn">👁</button>
           <button id="saveKeyBtn" class="btn-secondary">Save</button>
           <button id="clearKeyBtn" class="btn-secondary">Clear</button>
@@ -485,12 +602,12 @@
         <div id="apiStatus" class="api-status">No API key saved yet.</div>
 
         <div class="api-help">
+          This app uses <strong>Groq</strong> to generate your rant scripts.<br />
           Your API key is stored only in your browser (local storage).<br />
-          The Worker calls Groq or Gemini using your key.
+          You can create a free key here:
         </div>
 
         <a class="groq-link-btn" href="https://console.groq.com/keys" target="_blank">👉 Get your Groq API key</a>
-        <a class="groq-link-btn" href="https://aistudio.google.com/app/apikey" target="_blank">👉 Get your Gemini API key</a>
       </div>
     </div>
 
@@ -526,6 +643,26 @@
       applyTheme(newMode);
     });
 
+    /* HOW TO USE MODAL */
+    const howBtn = document.getElementById("howToBtn");
+    const howModal = document.getElementById("howModal");
+    const howClose = document.getElementById("howClose");
+
+    function openHow() {
+      howModal.classList.add("open");
+    }
+    function closeHow() {
+      howModal.classList.remove("open");
+    }
+    howBtn.addEventListener("click", openHow);
+    howClose.addEventListener("click", closeHow);
+    howModal.addEventListener("click", (e) => {
+      if (e.target === howModal) closeHow();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeHow();
+    });
+
     /* SLIDERS */
     const intensitySlider = document.getElementById("intensitySlider");
     const lengthSlider = document.getElementById("lengthSlider");
@@ -536,15 +673,15 @@
       const v = Number(intensitySlider.value);
       intensityLabel.textContent =
         v === 1 ? "Very chill" :
-        v === 2 ? "Cool" :
-        v === 3 ? "Salty" : "Full meltdown";
+        v === 2 ? "Cool / casual" :
+        v === 3 ? "Heated rant" : "Full meltdown";
     }
     function updateLengthLabel() {
       const v = Number(lengthSlider.value);
       lengthLabel.textContent =
-        v === 1 ? "Short rant" :
-        v === 2 ? "Medium rant" :
-        v === 3 ? "Long rant" : "Max rant";
+        v === 1 ? "~10–20 second rant" :
+        v === 2 ? "~20–30 second rant" :
+        v === 3 ? "~30–45 second rant" : "~45–60+ second rant";
     }
     intensitySlider.addEventListener("input", updateIntensityLabel);
     lengthSlider.addEventListener("input", updateLengthLabel);
@@ -560,13 +697,12 @@
       apiChevron.textContent = open ? "▲" : "▼";
     });
 
-    /* API KEY STORAGE */
+    /* API KEY STORAGE (Groq only) */
     const apiKeyInput = document.getElementById("apiKeyInput");
     const apiStatus = document.getElementById("apiStatus");
     const saveKeyBtn = document.getElementById("saveKeyBtn");
     const clearKeyBtn = document.getElementById("clearKeyBtn");
     const toggleKeyBtn = document.getElementById("toggleKeyBtn");
-    const providerSelect = document.getElementById("providerSelect");
 
     function showStatus(text, type) {
       apiStatus.textContent = text;
@@ -575,19 +711,13 @@
     function getApiKey() {
       return localStorage.getItem("fsg-user-api-key") || "";
     }
-    function getProvider() {
-      return localStorage.getItem("fsg-provider") || "groq";
-    }
 
     apiKeyInput.value = getApiKey();
-    providerSelect.value = getProvider();
 
     saveKeyBtn.addEventListener("click", () => {
       const key = apiKeyInput.value.trim();
-      const provider = providerSelect.value;
       if (!key) return showStatus("Please enter a key.", "err");
       localStorage.setItem("fsg-user-api-key", key);
-      localStorage.setItem("fsg-provider", provider);
       showStatus("API key saved.", "ok");
     });
 
@@ -611,43 +741,63 @@
       const intensity = Number(intensitySlider.value);
       const lengthVal = Number(lengthSlider.value);
       const includeSlang = document.getElementById("includeSlang").checked;
-      const spicy = document.getElementById("spicyMode").checked;
+      const salty = document.getElementById("saltyMode").checked;
       const narrator = document.getElementById("narratorSelect").value;
       const outputText = document.getElementById("output").innerText.trim();
 
       const narrators = {
-        male: "a male Roblox rant narrator",
-        neutral: "a gender-neutral narrator",
-        female: "a slightly sassy feminine narrator"
+        male: "a male Roblox-style rant narrator",
+        neutral: "a gender-neutral rant narrator",
+        female: "a female narrator with a slightly sassy tone"
       };
-      const intensities = ["Very chill", "Cool", "Salty", "Full meltdown"];
-      const lengths = ["short", "medium", "long", "extra long"];
+      const intensities = [
+        "very chill, low-energy commentary",
+        "casual but energetic rant tone",
+        "heated rant with more frustration",
+        "full meltdown, dramatic but still PG-13"
+      ];
+      const lengthConfigs = [
+        { label: "10–20 seconds", paragraphs: 2 },
+        { label: "20–30 seconds", paragraphs: 3 },
+        { label: "30–45 seconds", paragraphs: 5 },
+        { label: "45–60+ seconds", paragraphs: 7 }
+      ];
+      const lengthConfig = lengthConfigs[lengthVal - 1] || lengthConfigs[1];
 
       let styleBlock = `
-NARRATOR: ${narrators[narrator]}
-INTENSITY: ${intensities[intensity - 1]}
-LENGTH: ${lengths[lengthVal - 1]}
-SLANG: ${includeSlang ? "allowed" : "minimal"}
-SPICY MODE: ${spicy ? "mild PG-13 allowed" : "clean only"}
+VOICE: ${narrators[narrator]}
+RANT MELTDOWN: ${intensities[intensity - 1]}
+TARGET LENGTH: about ${lengthConfig.label} of spoken audio
+PARAGRAPHS: around ${lengthConfig.paragraphs} short paragraphs
+SLANG: ${includeSlang ? "use Gen Z slang naturally" : "keep slang minimal"}
+SALTY MODE: ${salty ? "extra attitude, sarcasm, and petty energy (still YouTube-safe)" : "normal level of annoyance"}
+PLATFORM: short-form video rant for TikTok / YouTube Shorts over Roblox or meme footage
 `;
 
       let instructions = `
-You are an expert Roblox rant narrator.
-ALWAYS start with: "I'm starting to realize..."
-Write fast, punchy, chaotic, Gen-Z humor.
-No emojis, no hashtags, no AI disclaimers.
-PG-13 only.
+You are writing a viral-style rant script for a short-form video.
+
+Rules:
+* ALWAYS start with the exact words: "I'm starting to realize..."
+* Tone: fast-paced, natural, like someone venting to the camera.
+* Style: short sentences, humor, irony, rhythm, and strong hooks.
+* Content: focus on something funny, relatable, or painfully true.
+* Build-up: gradually increase frustration or emotion.
+* Ending: finish with a funny or self-aware twist that feels satisfying.
+* No emojis, no hashtags, no AI disclaimers.
+* Keep everything YouTube-safe (no extreme slurs or graphic content).
+* It should sound like a script someone would read over Roblox gameplay or meme edits.
 `;
 
       let task = "";
       if (mode === "generate") {
-        task = `Write a rant about: "${topic || "a chaotic life situation"}"`;
+        task = `Write one viral-style rant script about: "${topic || "a painfully relatable real-life situation"}".`;
       } else if (mode === "rewrite") {
-        task = `Rewrite this into a stronger rant:\n"""${pasted || outputText}"""`;
+        task = `Rewrite the following rant into a stronger, more viral script, keeping the same main idea:\n"""${pasted || outputText}"""`;
       } else if (mode === "shuffle") {
-        task = `Create a NEW variation of a rant about: "${topic || "a chaotic life situation"}"`;
-      } else if (mode === "punchier") {
-        task = `Punch up this rant, make it tighter:\n"""${pasted || outputText}"""`;
+        task = `Create a completely new rant script variation about: "${topic || "a painfully relatable real-life situation"}". Make it feel different but still viral and relatable.`;
+      } else if (mode === "unique") {
+        task = `Take the following rant script and make a unique version of it. Keep the core topic but change the wording, pacing, and jokes so it feels fresh:\n"""${pasted || outputText}"""`;
       }
 
       return instructions + styleBlock + "\n" + task;
@@ -656,19 +806,18 @@ PG-13 only.
     /* CALL WORKER BACKEND */
     async function callAI(prompt) {
       const apiKey = getApiKey();
-      const provider = getProvider();
 
       if (!apiKey) {
-        showStatus("Add your API key first.", "err");
+        showStatus("Add your Groq API key first.", "err");
         throw new Error("Missing key");
       }
 
-      showStatus("Contacting AI provider…", "");
+      showStatus("Contacting Groq…", "");
 
       const res = await fetch("https://faceless-rant-proxy.bouncingstephen.workers.dev/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ provider, apiKey, prompt })
+        body: JSON.stringify({ apiKey, prompt })
       });
 
       const data = await res.json().catch(() => null);
@@ -687,16 +836,7 @@ PG-13 only.
 
       showStatus("AI response received.", "ok");
 
-      if (provider === "groq") {
-        return data?.choices?.[0]?.message?.content || "(No response)";
-      }
-      if (provider === "gemini") {
-        return (
-          data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-          "(No response)"
-        );
-      }
-      return "(Unknown provider output)";
+      return data?.choices?.[0]?.message?.content || "(No response)";
     }
 
     /* BUTTON ACTIONS */
@@ -704,7 +844,7 @@ PG-13 only.
     const generateBtn = document.getElementById("generateBtn");
     const rewriteBtn = document.getElementById("rewriteBtn");
     const shuffleBtn = document.getElementById("shuffleBtn");
-    const punchierBtn = document.getElementById("punchierBtn");
+    const uniqueBtn = document.getElementById("uniqueBtn");
     const copyBtn = document.getElementById("copyBtn");
 
     async function run(mode) {
@@ -720,7 +860,7 @@ PG-13 only.
     generateBtn.onclick = () => run("generate");
     rewriteBtn.onclick = () => run("rewrite");
     shuffleBtn.onclick = () => run("shuffle");
-    punchierBtn.onclick = () => run("punchier");
+    uniqueBtn.onclick = () => run("unique");
 
     copyBtn.onclick = () => {
       const txt = outputEl.textContent || "";
