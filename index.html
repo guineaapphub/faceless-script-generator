@@ -1,229 +1,273 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Roblox Rant Generator</title>
 
-  <!-- Google AdSense Verification -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6610889405997257"
-          crossorigin="anonymous"></script>
+<!-- GOOGLE ADSENSE VERIFICATION -->
+<script async 
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6610889405997257"
+  crossorigin="anonymous"></script>
 
-  <title>Faceless Script Generator</title>
+<!-- Styles -->
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    color: #111;
+  }
+  body.dark {
+    background: #0d0e12;
+    color: white;
+  }
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f5f5f5;
-      transition: background-color 0.3s;
-    }
+  .container {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 20px;
+  }
 
-    body.dark {
-      background-color: #111;
-      color: white;
-    }
+  h1 {
+    text-align: center;
+    font-size: 42px;
+    margin-bottom: 10px;
+    font-weight: 800;
+    text-shadow: 0 0 8px lime;
+  }
 
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-      transition: background 0.3s;
-    }
+  .section {
+    background: rgba(0,0,0,0.05);
+    padding: 18px;
+    border-radius: 14px;
+    margin-bottom: 20px;
+  }
+  body.dark .section {
+    background: #1a1d26;
+  }
 
-    body.dark .container {
-      background: #1c1c1c;
-    }
+  textarea, input, select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background: white;
+  }
+  body.dark textarea, body.dark input, body.dark select {
+    background: #0f1118;
+    border: 1px solid #333;
+    color: white;
+  }
 
-    h1 {
-      margin-top: 0;
-    }
+  button {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 10px;
+    background: #00ff57;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  button:hover { opacity: 0.8; }
 
-    input {
-      width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      border: 2px solid #ddd;
-      border-radius: 10px;
-      margin-top: 10px;
-      box-sizing: border-box;
-      transition: border 0.3s;
-    }
+  .ads-box {
+    width: 100%;
+    min-height: 120px;
+    margin: 25px 0;
+    background: rgba(0,0,0,0.05);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #666;
+  }
+  body.dark .ads-box {
+    background: rgba(255,255,255,0.05);
+    color: #aaa;
+  }
 
-    body.dark input {
-      background: #222;
-      color: white;
-      border: 2px solid #444;
-    }
-
-    .button-row {
-      display: flex;
-      gap: 12px;
-      margin-top: 14px;
-    }
-
-    button {
-      padding: 10px 18px;
-      font-size: 16px;
-      border: 2px solid #ddd;
-      background: white;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.25s;
-    }
-
-    body.dark button {
-      background: #222;
-      color: white;
-      border: 2px solid #444;
-    }
-
-    button:hover {
-      background: #eaeaea;
-    }
-
-    body.dark button:hover {
-      background: #333;
-    }
-
-    #api-output {
-      margin-top: 15px;
-      font-size: 15px;
-      font-weight: bold;
-      color: green;
-    }
-
-    /* Dropdown (Show / Hide) */
-    .dropdown {
-      position: relative;
-    }
-
-    .dropdown-btn {
-      padding: 10px 18px;
-      font-size: 16px;
-      border: 2px solid #ddd;
-      background: white;
-      border-radius: 10px;
-      cursor: pointer;
-      width: 100px;
-      text-align: center;
-    }
-
-    body.dark .dropdown-btn {
-      background: #222;
-      color: white;
-      border: 2px solid #444;
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background: white;
-      border: 2px solid #ddd;
-      border-radius: 10px;
-      width: 100px;
-      margin-top: 5px;
-      z-index: 10;
-    }
-
-    body.dark .dropdown-content {
-      background: #222;
-      border: 2px solid #444;
-    }
-
-    .dropdown-content div {
-      padding: 10px;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .dropdown-content div:hover {
-      background: #eaeaea;
-    }
-
-    body.dark .dropdown-content div:hover {
-      background: #333;
-    }
-  </style>
+  .toggle {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    padding: 9px 16px;
+    background: #222;
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+</style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>Groq API Key</h1>
 
-    <h2>Your Groq API key</h2>
+<div class="toggle" id="modeToggle">Dark</div>
 
-    <input id="apiKeyInput" type="password" placeholder="Enter your Groq API key" />
+<div class="container">
+  <h1>Roblox Rant Generator</h1>
+  <p style="text-align:center;margin-top:-10px;">Type Your Theme. Create Your Rant. Bye-Bye Noob.</p>
 
-    <div id="api-output"></div>
-
-    <br>
-
-    <div class="button-row">
-
-      <!-- SHOW / HIDE DROPDOWN -->
-      <div class="dropdown">
-        <button class="dropdown-btn" id="toggleDropdown">Show</button>
-        <div class="dropdown-content" id="dropdownMenu">
-          <div onclick="setVisibility(true)">Show</div>
-          <div onclick="setVisibility(false)">Hide</div>
-        </div>
-      </div>
-
-      <button id="saveBtn">Save</button>
-      <button id="clearBtn">Clear</button>
-    </div>
-
-    <p style="margin-top:30px; font-size:14px;">
-      This app uses <b>Groq</b> to generate your rant scripts.  
-      Your API key is stored only in your browser (local storage).  
-      You can create a free key here:
-    </p>
-
-    <a href="https://console.groq.com/keys" target="_blank">
-      👉 Get your Groq API key
-    </a>
-
+  <!-- TOP BANNER AD -->
+  <div class="ads-box">
+    <!-- Replace data-ad-slot later when approved -->
+    <ins class="adsbygoogle"
+         style="display:block; text-align:center;"
+         data-ad-client="ca-pub-6610889405997257"
+         data-ad-slot="1234567890"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
-  <script>
-    // Dropdown show/hide
-    const dropdownBtn = document.getElementById("toggleDropdown");
-    const dropdownMenu = document.getElementById("dropdownMenu");
-    const apiKeyInput = document.getElementById("apiKeyInput");
+  <div class="section">
+    <label>Topic / Theme</label>
+    <input id="topic" placeholder="iphone, pets, teachers, Roblox updates...">
+    
+    <label style="margin-top:15px;">Opening Line Style</label>
+    <select id="style">
+      <option>Random (let AI choose style)</option>
+      <option>Angry intro</option>
+      <option>Calm intro</option>
+      <option>Sarcastic intro</option>
+    </select>
 
-    dropdownBtn.onclick = () => {
-      dropdownMenu.style.display =
-        dropdownMenu.style.display === "block" ? "none" : "block";
-    };
+    <label style="margin-top:15px;">Paste Your Rant Script (optional)</label>
+    <textarea id="userScript" rows="6"></textarea>
 
-    function setVisibility(show) {
-      apiKeyInput.type = show ? "text" : "password";
-      dropdownBtn.textContent = show ? "Hide" : "Show";
-      dropdownMenu.style.display = "none";
+    <label style="margin-top:15px;">Narrator Style</label>
+    <select id="voice">
+      <option>Male Narrator</option>
+      <option>Female Narrator</option>
+      <option>Deep Rage Voice</option>
+      <option>Goofy High Pitched Voice</option>
+    </select>
+
+    <label style="margin-top:15px;">Rant Meltdown</label>
+    <input type="range" id="meltdown" min="0" max="10" value="5">
+
+    <label style="margin-top:15px;">Paragraphs</label>
+    <input type="range" id="paragraphs" min="1" max="8" value="3">
+
+    <div style="margin-top:15px;">
+      <input type="checkbox" id="slang" checked> Include slang  
+      <br>
+      <input type="checkbox" id="swearing"> Allow swearing
+    </div>
+
+    <button style="margin-top:18px;" onclick="generateRant()">Generate Rant</button>
+  </div>
+
+  <!-- MIDDLE AD -->
+  <div class="ads-box">
+    <ins class="adsbygoogle"
+         style="display:block; text-align:center;"
+         data-ad-client="ca-pub-6610889405997257"
+         data-ad-slot="9876543210"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <div class="section">
+    <h3>Generated Rant Script</h3>
+    <textarea id="output" rows="8"></textarea>
+  </div>
+
+  <!-- API KEY SECTION -->
+  <div class="section">
+    <h3>Groq API Key</h3>
+    <input type="password" id="apiKeyInput" placeholder="Enter your Groq API key">
+
+    <div style="margin-top:15px;">
+      <button onclick="toggleKey()">Show</button>
+      <button onclick="saveKey()">Save</button>
+      <button onclick="clearKey()">Clear</button>
+    </div>
+
+    <p style="font-size:14px;margin-top:10px;">
+      This app uses Groq to generate your rant scripts.  
+      Your API key is stored only in your browser.  
+      <br><br>
+      👉 <a href="https://console.groq.com/keys" target="_blank">Get your Groq API key</a>
+    </p>
+  </div>
+
+  <!-- BOTTOM AD -->
+  <div class="ads-box">
+    <ins class="adsbygoogle"
+         style="display:block; text-align:center;"
+         data-ad-client="ca-pub-6610889405997257"
+         data-ad-slot="2468135790"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+<script>
+/* Dark/Light Mode */
+const toggle = document.getElementById("modeToggle");
+toggle.onclick = () => {
+  document.body.classList.toggle("dark");
+  toggle.textContent = document.body.classList.contains("dark") ? "Light" : "Dark";
+};
+
+/* API KEY MANAGEMENT */
+function saveKey() {
+  localStorage.setItem("groqApiKey", apiKeyInput.value);
+  alert("API key saved!");
+}
+function clearKey() {
+  localStorage.removeItem("groqApiKey");
+  apiKeyInput.value = "";
+  alert("API key cleared!");
+}
+function toggleKey() {
+  apiKeyInput.type = apiKeyInput.type === "password" ? "text" : "password";
+}
+window.onload = () => {
+  const saved = localStorage.getItem("groqApiKey");
+  if (saved) apiKeyInput.value = saved;
+};
+
+/* GENERATE RANT */
+async function generateRant() {
+  const apiKey = apiKeyInput.value.trim();
+  if (!apiKey) return alert("Enter your Groq API key.");
+
+  const payload = {
+    topic: topic.value,
+    style: style.value,
+    script: userScript.value,
+    voice: voice.value,
+    meltdown: meltdown.value,
+    paragraphs: paragraphs.value,
+    slang: slang.checked,
+    swearing: swearing.checked
+  };
+
+  const res = await fetch(
+    "https://faceless-rant-proxy.bouncingstephen.workers.dev/api",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": apiKey
+      },
+      body: JSON.stringify(payload)
     }
+  );
 
-    // Save API key
-    document.getElementById("saveBtn").onclick = () => {
-      localStorage.setItem("groqApiKey", apiKeyInput.value);
-      document.getElementById("api-output").textContent = "API key saved!";
-    };
+  const data = await res.json();
+  output.value = data.rant || "No response received.";
+}
+</script>
 
-    // Clear API key
-    document.getElementById("clearBtn").onclick = () => {
-      localStorage.removeItem("groqApiKey");
-      apiKeyInput.value = "";
-      document.getElementById("api-output").textContent = "API key cleared!";
-    };
-
-    // Load stored key
-    window.onload = () => {
-      const savedKey = localStorage.getItem("groqApiKey");
-      if (savedKey) apiKeyInput.value = savedKey;
-    };
-  </script>
 </body>
 </html>
