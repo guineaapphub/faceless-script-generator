@@ -2,1188 +2,227 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
-  <title>Faceless Script Generator – Roblox Rant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap"
-    rel="stylesheet"
-  />
+  <!-- Google AdSense Verification -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6610889405997257"
+          crossorigin="anonymous"></script>
+
+  <title>Faceless Script Generator</title>
 
   <style>
-    :root {
-      --primary: #39ff14;
-      --primary-glow: rgba(57, 255, 20, 0.5);
-      --bg-light: #ffffff;
-      --bg-dark: #050712;
-      --text-light: #0d0d0d;
-      --text-dark: #f5f7ff;
-      --border-light: #d0d0dd;
-      --border-dark: #262a3b;
-      --card-light: #ffffff;
-      --card-dark: #111527;
-      --topbar-bg-light: #f7f7f9;
-      --topbar-bg-dark: #050712;
-    }
-
-    body.light {
-      background: var(--bg-light);
-      color: var(--text-light);
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      transition: background-color 0.3s;
     }
 
     body.dark {
-      background: var(--bg-dark);
-      color: var(--text-dark);
-    }
-
-    body {
-      font-family: "Rubik", sans-serif;
-      margin: 0;
-      padding: 0;
-      transition: background 0.3s ease, color 0.3s ease;
-    }
-
-    /* Top bar */
-    .top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 16px;
-      border-bottom: 1px solid var(--border-light);
-      background: var(--topbar-bg-light);
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-    body.dark .top-bar {
-      background: var(--topbar-bg-dark);
-      border-bottom-color: var(--border-dark);
-    }
-
-    /* Home icon button */
-    .home-btn {
-      border-radius: 999px;
-      border: 1px solid var(--border-light);
-      background: #f6f6f6;
-      padding: 6px 10px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
-    body.dark .home-btn {
-      background: #14182a;
-      border-color: var(--border-dark);
-      color: #f5f7ff;
-    }
-    .home-btn svg {
-      width: 16px;
-      height: 16px;
-    }
-    .home-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 0 6px var(--primary-glow);
-    }
-
-    .top-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .theme-mode-btn,
-    .how-btn {
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 1px solid var(--border-light);
-      background: #f6f6f6;
-      font-size: 14px;
-      cursor: pointer;
-      font-weight: 500;
-      transition: 0.25s ease;
-    }
-    body.dark .theme-mode-btn,
-    body.dark .how-btn {
-      border-color: var(--border-dark);
-      background: #14182a;
-      color: #f5f7ff;
-    }
-    .theme-mode-btn:hover,
-    .how-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 0 6px var(--primary-glow);
-    }
-
-    .discord-icon-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 999px;
-      border: 1px solid var(--border-light);
-      background: transparent;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.2s ease, transform 0.2s ease,
-        box-shadow 0.2s ease;
-      text-decoration: none;
-    }
-    body.dark .discord-icon-btn {
-      border-color: var(--border-dark);
-    }
-    .discord-icon-btn:hover {
-      background: rgba(88, 101, 242, 0.12);
-      transform: translateY(-1px);
-      box-shadow: 0 0 6px rgba(88, 101, 242, 0.5);
-    }
-    .discord-icon-btn svg {
-      width: 18px;
-      height: 18px;
-      fill: #5865f2;
+      background-color: #111;
+      color: white;
     }
 
     .container {
       max-width: 900px;
-      margin: 24px auto 40px;
-      padding: 0 16px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      transition: background 0.3s;
+    }
+
+    body.dark .container {
+      background: #1c1c1c;
     }
 
     h1 {
-      text-align: center;
-      color: var(--primary);
-      font-weight: 700;
-      margin-bottom: 4px;
-      text-shadow: 0 0 8px var(--primary-glow);
-      font-size: 32px;
+      margin-top: 0;
     }
 
-    .subtitle {
-      text-align: center;
-      font-size: 14px;
-      opacity: 0.9;
-      margin-bottom: 22px;
-    }
-
-    .ad-box {
+    input {
       width: 100%;
-      min-height: 90px;
-      border: 1px dashed var(--border-light);
+      padding: 14px;
+      font-size: 16px;
+      border: 2px solid #ddd;
       border-radius: 10px;
-      margin: 16px 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0.7;
-      font-size: 13px;
-    }
-    body.dark .ad-box {
-      border-color: var(--border-dark);
-    }
-
-    .panel {
-      background: var(--card-light);
-      border-radius: 14px;
-      padding: 18px 18px 20px;
-      border: 1px solid var(--border-light);
-      margin-bottom: 20px;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
-    }
-    body.dark .panel {
-      background: var(--card-dark);
-      border-color: var(--border-dark);
-      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.7);
-    }
-
-    label {
-      font-weight: 600;
-      margin-bottom: 6px;
-      display: block;
-      font-size: 14px;
-    }
-
-    input[type="text"],
-    input[type="password"],
-    textarea,
-    select {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border-light);
-      background: transparent;
-      color: inherit;
-      font-size: 14px;
-      margin-bottom: 14px;
+      margin-top: 10px;
       box-sizing: border-box;
-      outline: none;
-    }
-    body.dark input[type="text"],
-    body.dark input[type="password"],
-    body.dark textarea,
-    body.dark select {
-      background: #050712;
-      border-color: var(--border-dark);
+      transition: border 0.3s;
     }
 
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-
-    input:focus,
-    textarea:focus,
-    select:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 8px var(--primary-glow);
-    }
-
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-top: 4px;
-      margin-bottom: 6px;
-    }
-    .row > .col {
-      flex: 1 1 180px;
-    }
-
-    .slider-label {
-      font-weight: 600;
-      font-size: 13px;
-      margin-bottom: 4px;
-    }
-    .slider-value {
-      font-size: 12px;
-      opacity: 0.75;
-      margin-top: 2px;
-    }
-
-    input[type="range"] {
-      width: 100%;
-    }
-
-    .toggles {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 8px;
-      margin-bottom: 4px;
-    }
-    .toggles label {
-      font-weight: 500;
-      font-size: 13px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      margin-bottom: 0;
-    }
-
-    button {
-      border: none;
-      padding: 11px 14px;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 14px;
-      transition: 0.2s;
-      display: inline-block;
-    }
-    .btn-primary {
-      background: var(--primary);
-      color: #000;
-    }
-    .btn-secondary {
-      background: transparent;
-      color: inherit;
-      border: 1px solid var(--border-light);
-    }
-    body.dark .btn-secondary {
-      background: #151b2f;
-      border-color: var(--border-dark);
-    }
-    button:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-      box-shadow: 0 0 8px var(--primary-glow);
+    body.dark input {
+      background: #222;
+      color: white;
+      border: 2px solid #444;
     }
 
     .button-row {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
+      gap: 12px;
+      margin-top: 14px;
     }
 
-    /* API section */
-    .api-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    button {
+      padding: 10px 18px;
+      font-size: 16px;
+      border: 2px solid #ddd;
+      background: white;
+      border-radius: 10px;
       cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-    }
-    .api-header span:last-child {
-      font-size: 18px;
+      transition: 0.25s;
     }
 
-    .api-body {
-      margin-top: 10px;
-      display: none;
-    }
-    .api-body.open {
-      display: block;
+    body.dark button {
+      background: #222;
+      color: white;
+      border: 2px solid #444;
     }
 
-    .api-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    .api-row input {
-      flex: 1 1 220px;
-      margin-bottom: 0;
+    button:hover {
+      background: #eaeaea;
     }
 
-    .api-eye-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 54px;
-      padding-inline: 16px;
-    }
-    .api-eye-btn svg {
-      width: 18px;
-      height: 18px;
+    body.dark button:hover {
+      background: #333;
     }
 
-    .api-status {
-      font-size: 12px;
-      margin-top: 6px;
-      min-height: 16px;
-    }
-    .api-status.ok {
-      color: #2e7d32;
-    }
-    .api-status.err {
-      color: #c62828;
+    #api-output {
+      margin-top: 15px;
+      font-size: 15px;
+      font-weight: bold;
+      color: green;
     }
 
-    .api-help {
-      font-size: 12px;
-      margin-top: 6px;
-      opacity: 0.9;
-    }
-    .api-help a {
-      color: var(--primary);
-      font-weight: 600;
-      text-decoration: none;
-    }
-    .api-help a:hover {
-      text-decoration: underline;
+    /* Dropdown (Show / Hide) */
+    .dropdown {
+      position: relative;
     }
 
-    .groq-link-btn {
-      margin-top: 8px;
-      display: inline-block;
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border-light);
-      font-size: 12px;
-      text-decoration: none;
-      color: inherit;
-      transition: 0.2s;
-    }
-    body.dark .groq-link-btn {
-      border-color: var(--border-dark);
-    }
-    .groq-link-btn:hover {
-      border-color: var(--primary);
-      box-shadow: 0 0 6px var(--primary-glow);
-      transform: translateY(-1px);
-    }
-
-    /* Footer + Discord button */
-    .footer-note {
-      font-size: 12px;
+    .dropdown-btn {
+      padding: 10px 18px;
+      font-size: 16px;
+      border: 2px solid #ddd;
+      background: white;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100px;
       text-align: center;
-      opacity: 0.9;
-      margin-top: 18px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
-    .footer-note span {
-      opacity: 0.85;
-    }
-    .discord-footer-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 18px;
-      border-radius: 999px;
-      border: none;
-      background: #5865f2;
-      color: #ffffff;
-      font-weight: 600;
-      font-size: 13px;
-      text-decoration: none;
-      box-shadow: 0 4px 14px rgba(88, 101, 242, 0.55);
-      transition: transform 0.15s ease, box-shadow 0.15s ease,
-        background 0.15s ease;
-    }
-    .discord-footer-btn:hover {
-      background: #4753d5;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(88, 101, 242, 0.7);
     }
 
-    /* How to Use modal */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.55);
+    body.dark .dropdown-btn {
+      background: #222;
+      color: white;
+      border: 2px solid #444;
+    }
+
+    .dropdown-content {
       display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
+      position: absolute;
+      background: white;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      width: 100px;
+      margin-top: 5px;
+      z-index: 10;
     }
-    .modal-overlay.open {
-      display: flex;
+
+    body.dark .dropdown-content {
+      background: #222;
+      border: 2px solid #444;
     }
-    .modal {
-      max-width: 520px;
-      width: 90%;
-      background: var(--card-light);
-      border-radius: 16px;
-      border: 1px solid var(--border-light);
-      padding: 18px 22px 16px;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
-      animation: fadeInUp 0.18s ease-out;
-    }
-    body.dark .modal {
-      background: var(--card-dark);
-      border-color: var(--border-dark);
-    }
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .modal-title {
-      font-size: 20px;
-      font-weight: 700;
-    }
-    .modal-close {
-      border-radius: 999px;
-      border: 1px solid var(--border-light);
-      padding: 4px 10px;
-      font-size: 13px;
+
+    .dropdown-content div {
+      padding: 10px;
       cursor: pointer;
-      background: transparent;
-    }
-    body.dark .modal-close {
-      border-color: var(--border-dark);
-      color: #f5f7ff;
-    }
-    .modal-close:hover {
-      box-shadow: 0 0 6px var(--primary-glow);
-    }
-    .modal-body {
-      font-size: 13px;
-      line-height: 1.55;
-    }
-    .modal-body ol {
-      padding-left: 18px;
-      margin-top: 6px;
-      margin-bottom: 8px;
-    }
-    .modal-body li {
-      margin-bottom: 4px;
-    }
-    .modal-tip {
-      margin-top: 8px;
-      font-size: 12px;
-      opacity: 0.8;
-    }
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(4px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      text-align: center;
     }
 
-    #output {
-      min-height: 160px;
-      white-space: pre-wrap;
-      line-height: 1.55rem;
-      font-size: 1.02rem;
+    .dropdown-content div:hover {
+      background: #eaeaea;
     }
 
-    .copy-flash {
-      font-size: 11px;
-      margin-left: 6px;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-    }
-    .copy-flash.visible {
-      opacity: 0.85;
-    }
-
-    /* Home toast */
-    .home-toast {
-      position: fixed;
-      top: 46px;
-      left: 16px;
-      background: rgba(0, 0, 0, 0.92);
-      color: #f5f7ff;
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease;
-      z-index: 120;
-      border: 1px solid #333955;
-    }
-    .home-toast.show {
-      opacity: 1;
-    }
-
-    @media (max-width: 600px) {
-      .top-bar {
-        padding: 8px 10px;
-      }
-      .button-row {
-        flex-direction: column;
-      }
+    body.dark .dropdown-content div:hover {
+      background: #333;
     }
   </style>
 </head>
 
-<body class="light">
-  <!-- TOP BAR -->
-  <div class="top-bar">
-    <!-- Home icon -->
-    <button id="homeBtn" class="home-btn" title="Home">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path
-          d="M12 3 3 10h2v9h5v-5h4v5h5v-9h2L12 3z"
-          fill="currentColor"
-        />
-      </svg>
-    </button>
-
-    <div class="top-right">
-      <button id="themeModeBtn" class="theme-mode-btn">🌙 Dark</button>
-      <button id="howToBtn" class="how-btn">How to Use</button>
-
-      <a
-        href="https://discord.gg/Y4GenJXgEn"
-        class="discord-icon-btn"
-        target="_blank"
-        rel="noopener noreferrer"
-        title="Join our Discord community"
-      >
-        <svg viewBox="0 0 245 240">
-          <path
-            d="M104.4 104.9c-5.7 0-10.2 5-10.2 11.1s4.6 11.1 10.2 11.1c5.7 0 10.2-5 10.2-11.1.1-6.1-4.5-11.1-10.2-11.1zm36.2 0c-5.7 0-10.2 5-10.2 11.1s4.6 11.1 10.2 11.1c5.7 0 10.2-5 10.2-11.1s-4.5-11.1-10.2-11.1z"
-          />
-          <path
-            d="M189.5 20h-134C42.2 20 32 30.2 32 42.7v134.6c0 12.5 10.2 22.7 23.5 22.7h113.3l-5.3-18.5 12.8 11.9 12.1 11.3 21.5 19V42.7C209.8 30.2 199.6 20 186.3 20h3.2zm-39.2 135.2s-3.7-4.4-6.8-8.3c13.5-3.8 18.6-12.2 18.6-12.2-4.2 2.7-8.2 4.6-11.8 5.9-5.1 2.1-9.9 3.4-14.6 4.2-9.6 1.8-18.4 1.3-25.9-.1-5.7-1.1-10.6-2.6-14.7-4.2-2.3-.9-4.8-2-7.3-3.4-.3-.2-.6-.3-.9-.5-.2-.1-.3-.2-.4-.3-1.8-1-2.8-1.7-2.8-1.7s4.9 8.2 17.9 12.1c-3.1 3.9-6.9 8.5-6.9 8.5-22.8-.7-31.5-15.7-31.5-15.7 0-33.3 14.9-60.3 14.9-60.3 14.9-11.2 29.1-10.9 29.1-10.9l1 1.2c-18.7 5.4-27.3 13.7-27.3 13.7s2.3-1.3 6.1-3.1c11.1-4.9 19.9-6.2 23.5-6.5.6-.1 1.1-.2 1.7-.2 6.1-.8 13-1 20.2-.2 9.5 1.1 19.7 3.9 30.1 9.6 0 0-8.2-7.8-25.9-13.2l1.4-1.6s14.2-.3 29.1 10.9c0 0 14.9 27 14.9 60.3 0 0-8.8 15-31.6 15.7z"
-          />
-        </svg>
-      </a>
-    </div>
-  </div>
-
-  <!-- Home toast -->
-  <div id="homeToast" class="home-toast">
-    More faceless generators coming soon.
-  </div>
-
-  <!-- HOW TO USE MODAL -->
-  <div id="howModal" class="modal-overlay">
-    <div class="modal">
-      <div class="modal-header">
-        <div class="modal-title">How to Use the Roblox Rant Generator</div>
-        <button id="howClose" class="modal-close">Close</button>
-      </div>
-      <div class="modal-body">
-        <ol>
-          <li>
-            <strong>Type a Topic / Theme</strong> in the box (e.g., “school”, “strict
-            parents”, “laggy servers”, “memes”).
-          </li>
-          <li>
-            <strong>Pick an opening style</strong> (or leave it on Random) to choose how
-            the rant starts.
-          </li>
-          <li>
-            <strong>Set Rant Meltdown</strong> to choose the tone (Very chill → Full
-            meltdown).
-          </li>
-          <li>
-            <strong>Choose how many paragraphs</strong> you want (1–60) to control the
-            length.
-          </li>
-          <li>
-            <strong>Pick a Narrator</strong> – male, gender-neutral, or female.
-          </li>
-          <li>
-            <strong>Optional toggles:</strong> include slang and allow swearing
-            if you want a stronger script.
-          </li>
-          <li>
-            <strong>Optional:</strong> paste any rant into the box to rewrite, shuffle,
-            or make it more unique.
-          </li>
-          <li>
-            Click <strong>Generate Rant</strong>, <strong>Rewrite</strong>,
-            <strong>Shuffle</strong>, or <strong>Make Unique</strong> to create a script.
-          </li>
-          <li>
-            Edit the script directly in the box if you want, then hit
-            <strong>Copy</strong> when you’re happy with it.
-          </li>
-          <li>
-            Make sure you’ve added your <strong>Groq API key</strong> in the API section
-            so the AI can work.
-          </li>
-        </ol>
-        <div class="modal-tip">
-          Tip: Clear, simple topics usually give the strongest, most relatable rants.
-        </div>
-      </div>
-    </div>
-  </div>
-
+<body>
   <div class="container">
-    <h1>Roblox Rant Generator</h1>
-    <div class="subtitle">
-      Type Your Theme. Create Your Rant. Bye-Bye Noob.
-    </div>
+    <h1>Groq API Key</h1>
 
-    <div class="ad-box">Ad Placeholder — Top Banner</div>
+    <h2>Your Groq API key</h2>
 
-    <!-- RANT CONTROLS -->
-    <div class="panel">
-      <label for="topicInput">Topic / Theme</label>
-      <input
-        id="topicInput"
-        type="text"
-        placeholder="e.g. school, laggy servers, strict parents, annoying friends, memes"
-      />
+    <input id="apiKeyInput" type="password" placeholder="Enter your Groq API key" />
 
-      <label for="introSelect">Opening Line Style</label>
-      <select id="introSelect">
-        <option value="random">Random (let AI choose style)</option>
-        <option value="I'm starting to realize...">I'm starting to realize...</option>
-        <option value="Tell me why this keeps happening...">
-          Tell me why this keeps happening...
-        </option>
-        <option value="Bro, don't even get me started...">
-          Bro, don't even get me started...
-        </option>
-        <option value="Lately I've been noticing...">Lately I've been noticing...</option>
-        <option value="You ever notice how...">You ever notice how...</option>
-        <option value="Honestly, at this point...">Honestly, at this point...</option>
-        <option value="Ain't no way this just happened...">
-          Ain't no way this just happened...
-        </option>
-      </select>
+    <div id="api-output"></div>
 
-      <label for="pasteInput">Paste Your Rant Script Here (optional)</label>
-      <textarea
-        id="pasteInput"
-        placeholder="Paste any rant to rewrite, shuffle, or make more unique..."
-      ></textarea>
+    <br>
 
-      <label for="narratorSelect">Narrator Style</label>
-      <select id="narratorSelect">
-        <option value="male">Male Narrator</option>
-        <option value="neutral">Gender-neutral Narrator</option>
-        <option value="female">Female Narrator</option>
-      </select>
+    <div class="button-row">
 
-      <div class="row">
-        <div class="col">
-          <div class="slider-label">Rant Meltdown</div>
-          <input id="intensitySlider" type="range" min="1" max="4" value="2" />
-          <div id="intensityLabel" class="slider-value">Cool / casual</div>
-        </div>
-        <div class="col">
-          <div class="slider-label">
-            Paragraphs <span id="paraCountLabel">(4)</span>
-          </div>
-          <input id="paragraphSlider" type="range" min="1" max="60" value="4" />
-          <div class="slider-value">
-            More paragraphs = longer script (approx. up to 60 seconds).
-          </div>
+      <!-- SHOW / HIDE DROPDOWN -->
+      <div class="dropdown">
+        <button class="dropdown-btn" id="toggleDropdown">Show</button>
+        <div class="dropdown-content" id="dropdownMenu">
+          <div onclick="setVisibility(true)">Show</div>
+          <div onclick="setVisibility(false)">Hide</div>
         </div>
       </div>
 
-      <div class="toggles">
-        <label>
-          <input id="includeSlang" type="checkbox" checked />
-          Include slang
-        </label>
-        <label>
-          <input id="softSwears" type="checkbox" />
-          Allow swearing
-        </label>
-      </div>
-
-      <div class="button-row">
-        <button id="generateBtn" class="btn-primary">Generate Rant</button>
-        <button id="rewriteBtn" class="btn-secondary">Rewrite</button>
-        <button id="shuffleBtn" class="btn-secondary">Shuffle</button>
-        <button id="uniqueBtn" class="btn-secondary">Make Unique</button>
-        <button id="copyBtn" class="btn-secondary">
-          Copy
-          <span id="copyFlash" class="copy-flash">Copied!</span>
-        </button>
-      </div>
+      <button id="saveBtn">Save</button>
+      <button id="clearBtn">Clear</button>
     </div>
 
-    <div class="ad-box">Ad Placeholder — Middle Banner</div>
+    <p style="margin-top:30px; font-size:14px;">
+      This app uses <b>Groq</b> to generate your rant scripts.  
+      Your API key is stored only in your browser (local storage).  
+      You can create a free key here:
+    </p>
 
-    <!-- OUTPUT -->
-    <div class="panel">
-      <label for="output">Generated Rant Script</label>
-      <textarea
-        id="output"
-        placeholder="Your rant will appear here. You can edit it before copying..."
-      ></textarea>
-    </div>
+    <a href="https://console.groq.com/keys" target="_blank">
+      👉 Get your Groq API key
+    </a>
 
-    <!-- API SETTINGS -->
-    <div class="panel">
-      <div id="apiHeader" class="api-header">
-        <span>Groq API Key</span>
-        <span id="apiChevron">▼</span>
-      </div>
-
-      <div id="apiBody" class="api-body">
-        <label for="apiKeyInput">Your Groq API key</label>
-        <div class="api-row">
-          <input
-            id="apiKeyInput"
-            type="password"
-            placeholder="Paste your Groq API key here"
-          />
-          <button id="toggleKeyBtn" class="btn-secondary api-eye-btn" type="button"></button>
-          <button id="saveKeyBtn" class="btn-secondary" type="button">Save</button>
-          <button id="clearKeyBtn" class="btn-secondary" type="button">Clear</button>
-        </div>
-
-        <div id="apiStatus" class="api-status">No API key saved yet.</div>
-
-        <div class="api-help">
-          This app uses <strong>Groq</strong> to generate your rant scripts.<br />
-          Your API key is stored only in your browser (local storage).<br />
-          You can create a free key here:
-        </div>
-
-        <a
-          class="groq-link-btn"
-          href="https://console.groq.com/keys"
-          target="_blank"
-          >👉 Get your Groq API key</a
-        >
-      </div>
-    </div>
-
-    <div class="ad-box">Ad Placeholder — Footer Banner</div>
-
-    <!-- Footer Discord button -->
-    <div class="footer-note">
-      <span>For support & connect with other creators.</span>
-      <a
-        href="https://discord.gg/Y4GenJXgEn"
-        target="_blank"
-        class="discord-footer-btn"
-      >
-        Join our FREE Discord
-      </a>
-    </div>
   </div>
 
   <script>
-    /* THEME TOGGLE */
-    const themeBtn = document.getElementById("themeModeBtn");
-    function systemPrefersDark() {
-      return window.matchMedia("(prefers-color-scheme: dark)").matches;
-    }
-    function applyTheme(mode) {
-      document.body.classList.remove("light", "dark");
-      document.body.classList.add(mode);
-      localStorage.setItem("fsg-theme", mode);
-      themeBtn.textContent = mode === "dark" ? "🌙 Dark" : "☀️ Light";
-    }
-    const savedTheme = localStorage.getItem("fsg-theme");
-    if (savedTheme) applyTheme(savedTheme);
-    else applyTheme(systemPrefersDark() ? "dark" : "light");
-    themeBtn.addEventListener("click", () => {
-      const newMode = document.body.classList.contains("dark")
-        ? "light"
-        : "dark";
-      applyTheme(newMode);
-      updateEyeIcon();
-    });
-
-    /* HOW TO USE MODAL */
-    const howBtn = document.getElementById("howToBtn");
-    const howModal = document.getElementById("howModal");
-    const howClose = document.getElementById("howClose");
-
-    function openHow() {
-      howModal.classList.add("open");
-    }
-    function closeHow() {
-      howModal.classList.remove("open");
-    }
-    howBtn.addEventListener("click", openHow);
-    howClose.addEventListener("click", closeHow);
-    howModal.addEventListener("click", (e) => {
-      if (e.target === howModal) closeHow();
-    });
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeHow();
-    });
-
-    /* HOME BUTTON TOAST */
-    const homeBtn = document.getElementById("homeBtn");
-    const homeToast = document.getElementById("homeToast");
-    let homeToastTimeout = null;
-
-    homeBtn.addEventListener("click", () => {
-      if (homeToastTimeout) clearTimeout(homeToastTimeout);
-      homeToast.classList.add("show");
-      homeToastTimeout = setTimeout(() => {
-        homeToast.classList.remove("show");
-      }, 2000);
-    });
-
-    /* SLIDERS */
-    const intensitySlider = document.getElementById("intensitySlider");
-    const paragraphSlider = document.getElementById("paragraphSlider");
-    const intensityLabel = document.getElementById("intensityLabel");
-    const paraCountLabel = document.getElementById("paraCountLabel");
-
-    function updateIntensityLabel() {
-      const v = Number(intensitySlider.value);
-      intensityLabel.textContent =
-        v === 1
-          ? "Very chill"
-          : v === 2
-          ? "Cool / casual"
-          : v === 3
-          ? "Heated rant"
-          : "Full meltdown";
-    }
-    function updateParagraphLabel() {
-      const v = Number(paragraphSlider.value);
-      paraCountLabel.textContent = `(${v})`;
-    }
-    intensitySlider.addEventListener("input", updateIntensityLabel);
-    paragraphSlider.addEventListener("input", updateParagraphLabel);
-    updateIntensityLabel();
-    updateParagraphLabel();
-
-    /* COLLAPSIBLE API PANEL */
-    const apiHeader = document.getElementById("apiHeader");
-    const apiBody = document.getElementById("apiBody");
-    const apiChevron = document.getElementById("apiChevron");
-    apiHeader.addEventListener("click", () => {
-      const open = apiBody.classList.toggle("open");
-      apiChevron.textContent = open ? "▲" : "▼";
-    });
-
-    /* API KEY STORAGE (Groq only) */
+    // Dropdown show/hide
+    const dropdownBtn = document.getElementById("toggleDropdown");
+    const dropdownMenu = document.getElementById("dropdownMenu");
     const apiKeyInput = document.getElementById("apiKeyInput");
-    const apiStatus = document.getElementById("apiStatus");
-    const saveKeyBtn = document.getElementById("saveKeyBtn");
-    const clearKeyBtn = document.getElementById("clearKeyBtn");
-    const toggleKeyBtn = document.getElementById("toggleKeyBtn");
 
-    function showStatus(text, type) {
-      apiStatus.textContent = text;
-      apiStatus.className = "api-status " + (type || "");
-    }
-    function getApiKey() {
-      return localStorage.getItem("fsg-user-api-key") || "";
-    }
+    dropdownBtn.onclick = () => {
+      dropdownMenu.style.display =
+        dropdownMenu.style.display === "block" ? "none" : "block";
+    };
 
-    // SVGs for light & dark mode
-    const LIGHT_EYE =
-      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12.0003 3C17.3924 3 21.8784 6.87976 22.8189 12C21.8784 17.1202 17.3924 21 12.0003 21C6.60812 21 2.12215 17.1202 1.18164 12C2.12215 6.87976 6.60812 3 12.0003 3ZM12.0003 19C16.2359 19 19.8603 16.052 20.7777 12C19.8603 7.94803 16.2359 5 12.0003 5C7.7646 5 4.14022 7.94803 3.22278 12C4.14022 16.052 7.7646 19 12.0003 19ZM12.0003 16.5C9.51498 16.5 7.50026 14.4853 7.50026 12C7.50026 9.51472 9.51498 7.5 12.0003 7.5C14.4855 7.5 16.5003 9.51472 16.5003 12C16.5003 14.4853 14.4855 16.5 12.0003 16.5ZM12.0003 14.5C13.381 14.5 14.5003 13.3807 14.5003 12C14.5003 10.6193 13.381 9.5 12.0003 9.5C10.6196 9.5 9.50026 10.6193 9.50026 12C9.50026 13.3807 10.6196 14.5 12.0003 14.5Z"></path></svg>';
-
-    const LIGHT_EYE_OFF =
-      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.8827 19.2968C16.1814 20.3755 14.1638 21.0002 12.0003 21.0002C6.60812 21.0002 2.12215 17.1204 1.18164 12.0002C1.61832 9.62282 2.81932 7.5129 4.52047 5.93457L1.39366 2.80777L2.80788 1.39355L22.6069 21.1925L21.1927 22.6068L17.8827 19.2968ZM5.9356 7.3497C4.60673 8.56015 3.6378 10.1672 3.22278 12.0002C4.14022 16.0521 7.7646 19.0002 12.0003 19.0002C13.5997 19.0002 15.112 18.5798 16.4243 17.8384L14.396 15.8101C13.7023 16.2472 12.8808 16.5002 12.0003 16.5002C9.51498 16.5002 7.50026 14.4854 7.50026 12.0002C7.50026 11.1196 7.75317 10.2981 8.19031 9.60442L5.9356 7.3497ZM12.9139 14.328L9.67246 11.0866C9.5613 11.3696 9.50026 11.6777 9.50026 12.0002C9.50026 13.3809 10.6196 14.5002 12.0003 14.5002C12.3227 14.5002 12.6309 14.4391 12.9139 14.328ZM20.8068 16.5925L19.376 15.1617C20.0319 14.2268 20.5154 13.1586 20.7777 12.0002C19.8603 7.94818 16.2359 5.00016 12.0003 5.00016C11.1544 5.00016 10.3329 5.11773 9.55249 5.33818L7.97446 3.76015C9.22127 3.26959 10.5793 3.00016 12.0003 3.00016C17.3924 3.00016 21.8784 6.87992 22.8189 12.0002C22.5067 13.6998 21.8038 15.2628 20.8068 16.5925ZM11.7229 7.50857C11.8146 7.50299 11.9071 7.50016 12.0003 7.50016C14.4855 7.50016 16.5003 9.51488 16.5003 12.0002C16.5003 12.0933 16.4974 12.1858 16.4919 12.2775L11.7229 7.50857Z"></path></svg>';
-
-    const DARK_EYE =
-      '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>';
-
-    const DARK_EYE_OFF =
-      '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" /></svg>';
-
-    function updateEyeIcon() {
-      const isDark = document.body.classList.contains("dark");
-      const isVisible = apiKeyInput.type === "text";
-      if (isDark) {
-        toggleKeyBtn.innerHTML = isVisible ? DARK_EYE_OFF : DARK_EYE;
-      } else {
-        toggleKeyBtn.innerHTML = isVisible ? LIGHT_EYE_OFF : LIGHT_EYE;
-      }
+    function setVisibility(show) {
+      apiKeyInput.type = show ? "text" : "password";
+      dropdownBtn.textContent = show ? "Hide" : "Show";
+      dropdownMenu.style.display = "none";
     }
 
-    // initialize API key field
-    apiKeyInput.value = getApiKey();
-    apiKeyInput.type = "password";
-    updateEyeIcon();
+    // Save API key
+    document.getElementById("saveBtn").onclick = () => {
+      localStorage.setItem("groqApiKey", apiKeyInput.value);
+      document.getElementById("api-output").textContent = "API key saved!";
+    };
 
-    toggleKeyBtn.addEventListener("click", () => {
-      apiKeyInput.type = apiKeyInput.type === "password" ? "text" : "password";
-      updateEyeIcon();
-    });
-
-    saveKeyBtn.addEventListener("click", () => {
-      const key = apiKeyInput.value.trim();
-      if (!key) return showStatus("Please enter a key.", "err");
-      localStorage.setItem("fsg-user-api-key", key);
-      showStatus("API key saved.", "ok");
-    });
-
-    clearKeyBtn.addEventListener("click", () => {
-      localStorage.removeItem("fsg-user-api-key");
+    // Clear API key
+    document.getElementById("clearBtn").onclick = () => {
+      localStorage.removeItem("groqApiKey");
       apiKeyInput.value = "";
-      apiKeyInput.type = "password";
-      updateEyeIcon();
-      showStatus("API key cleared.", "err");
-    });
+      document.getElementById("api-output").textContent = "API key cleared!";
+    };
 
-    /* PROMPT BUILDER + AI CALL */
-    const topicInput = document.getElementById("topicInput");
-    const pasteInput = document.getElementById("pasteInput");
-    const narratorSelect = document.getElementById("narratorSelect");
-    const introSelect = document.getElementById("introSelect");
-    const includeSlang = document.getElementById("includeSlang");
-    const softSwears = document.getElementById("softSwears");
-    const outputEl = document.getElementById("output");
-
-    function buildPrompt(mode) {
-      const topic = topicInput.value.trim();
-      const pasted = pasteInput.value.trim();
-      const intensity = Number(intensitySlider.value);
-      const paragraphCount = Number(paragraphSlider.value);
-      const narrator = narratorSelect.value;
-      const slang = includeSlang.checked;
-      const soft = softSwears.checked;
-      const introChoice = introSelect.value;
-      const currentOutput = outputEl.value.trim();
-
-      const narrators = {
-        male: "a male Roblox-style rant narrator",
-        neutral: "a gender-neutral rant narrator",
-        female: "a female narrator with a slightly sassy tone",
-      };
-      const intensities = [
-        "very chill, low-energy commentary",
-        "casual but energetic rant tone",
-        "heated rant with more frustration",
-        "full meltdown, dramatic but still PG-13",
-      ];
-
-      let openingBlock = "";
-      const openingList = [
-        "I'm starting to realize...",
-        "Tell me why this keeps happening...",
-        "Bro, don't even get me started...",
-        "Lately I've been noticing...",
-        "You ever notice how...",
-        "Honestly, at this point...",
-        "Ain't no way this just happened...",
-      ];
-
-      if (introChoice === "random") {
-        openingBlock = `
-OPENING LINE:
-- Choose ONE natural-sounding opening line that fits the topic and tone.
-- You can choose from lines like: "${openingList.join(
-          '" , "'
-        )}" or a very similar variant.
-- Do NOT use multiple different openings, only one.`;
-      } else {
-        openingBlock = `
-OPENING LINE:
-- Start the script with this exact text (then continue the rant): "${introChoice}"`;
-      }
-
-      let swearsBlock = "";
-      if (soft) {
-        swearsBlock = `
-SWEARING:
-- Mild PG-13 swears are allowed, like: "crap", "damn", "freaking", "heck", "hell".
-- Never use extreme profanity such as the f-word, s-word, or any slurs.`;
-      } else {
-        swearsBlock = `
-SWEARING:
-- Do NOT use any swear words at all. Keep the language clean and YouTube-safe.`;
-      }
-
-      const styleBlock = `
-VOICE: ${narrators[narrator]}
-RANT MELTDOWN: ${intensities[intensity - 1]}
-PARAGRAPHS: write about ${paragraphCount} short paragraphs (each 1–3 sentences).
-SLANG: ${
-        slang
-          ? "Use slang naturally when it fits the topic."
-          : "Use almost no slang. Keep it simple and clear."
-      }
-${swearsBlock}
-${openingBlock}
-
-STYLE REFERENCES (for vibe / pacing only, never copy scripts):
-- @kittyrantsroblox
-- @burpster
-- @RoRants
-- @SillyWIllyRants
-- @AngelCatBlox
-- @natetriggerRants
-- @PR3SIDNT
-- @feyzeYT
-- @PenguinRants
-`;
-
-      const baseInstructions = `
-You are writing a viral-style rant script for a short-form video (TikTok / YouTube Shorts) over Roblox or meme gameplay.
-
-Rules:
-* Use a strong opening line (as described above), then flow straight into the rant.
-* Tone: fast-paced, natural, like someone venting to the camera.
-* Style: short sentences, humor, irony, rhythm, and strong hooks.
-* Content: focus on something funny, relatable, or painfully true.
-* Build-up: gradually increase frustration or emotion.
-* Ending: finish with a funny or self-aware twist that feels satisfying.
-* No emojis, no hashtags, no AI disclaimers.
-* Everything must be original. Do not copy lines from any existing videos or channels.
-`;
-
-      let task = "";
-      const baseTopic =
-        topic || "a painfully relatable real-life situation or annoyance";
-
-      if (mode === "generate") {
-        task = `Write one viral-style rant script about: "${baseTopic}".`;
-      } else if (mode === "rewrite") {
-        task = `Rewrite the following rant into a stronger, more viral script, keeping the same main idea and emotion:\n"""${
-          pasted || currentOutput
-        }"""`;
-      } else if (mode === "shuffle") {
-        task = `Using the same general idea and topic, create a different rant script variation.\nIf there is text below, treat it as the previous version and make a new one that feels fresh but stays on the same core topic:\n"""${
-          pasted || currentOutput || baseTopic
-        }"""`;
-      } else if (mode === "unique") {
-        task = `Take the following rant script and make a unique version of it. Keep the core topic but change the wording, pacing, and jokes so it feels fresh and different:\n"""${
-          pasted || currentOutput
-        }"""`;
-      }
-
-      return baseInstructions + styleBlock + "\n" + task;
-    }
-
-    async function callAI(prompt) {
-      const apiKey = getApiKey();
-
-      if (!apiKey) {
-        showStatus("Add your Groq API key first.", "err");
-        throw new Error("Missing key");
-      }
-
-      showStatus("Contacting Groq…", "");
-
-      const res = await fetch(
-        "https://faceless-rant-proxy.bouncingstephen.workers.dev/",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ apiKey, prompt }),
-        }
-      );
-
-      const data = await res.json().catch(() => null);
-
-      if (!res.ok) {
-        let detail = "";
-        if (data && data.detail) {
-          detail =
-            typeof data.detail === "string"
-              ? data.detail
-              : JSON.stringify(data.detail);
-        }
-        showStatus(
-          `Error ${res.status} – ${detail || "see console"}`,
-          "err"
-        );
-        console.error("AI error", data);
-        throw new Error("AI request failed");
-      }
-
-      showStatus("AI response received.", "ok");
-
-      return data?.choices?.[0]?.message?.content || "(No response)";
-    }
-
-    const generateBtn = document.getElementById("generateBtn");
-    const rewriteBtn = document.getElementById("rewriteBtn");
-    const shuffleBtn = document.getElementById("shuffleBtn");
-    const uniqueBtn = document.getElementById("uniqueBtn");
-    const copyBtn = document.getElementById("copyBtn");
-    const copyFlash = document.getElementById("copyFlash");
-
-    async function run(mode) {
-      try {
-        const prompt = buildPrompt(mode);
-        const text = await callAI(prompt);
-        outputEl.value = text;
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    generateBtn.onclick = () => run("generate");
-    rewriteBtn.onclick = () => run("rewrite");
-    shuffleBtn.onclick = () => run("shuffle");
-    uniqueBtn.onclick = () => run("unique");
-
-    copyBtn.onclick = () => {
-      const txt = outputEl.value || "";
-      if (!txt.trim()) return;
-      navigator.clipboard.writeText(txt).then(
-        () => {
-          copyFlash.classList.add("visible");
-          copyBtn.disabled = true;
-          setTimeout(() => {
-            copyFlash.classList.remove("visible");
-            copyBtn.disabled = false;
-          }, 1200);
-        },
-        () => {}
-      );
+    // Load stored key
+    window.onload = () => {
+      const savedKey = localStorage.getItem("groqApiKey");
+      if (savedKey) apiKeyInput.value = savedKey;
     };
   </script>
 </body>
